@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Deutsch Mastery Pro v4.0</title>
+    <style>
+        :root {
+            --bg: #0f172a; --card: #1e293b; --primary: #8b5cf6;
+            --primary-light: #a78bfa; --success: #10b981; --danger: #ef4444;
+            --text: #f1f5f9; --text-muted: #94a3b8; --border: #334155;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif; margin: 0; padding: 15px;
+            background-color: var(--bg); color: var(--text); line-height: 1.6;
+        }
+
+        .container { max-width: 500px; margin: auto; }
+
+        .top-nav { display: flex; justify-content: space-between; margin-bottom: 20px; }
+        .nav-btn { 
+            background: rgba(255,255,255,0.05); border: 1px solid var(--border); 
+            color: var(--text); padding: 8px 16px; border-radius: 12px; font-size: 13px; cursor: pointer;
+        }
+
+        .card { 
+            background: var(--card); padding: 20px; border-radius: 24px; 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3); border: 1px solid var(--border);
+            margin-bottom: 20px;
+        }
+
+        .mode-selector { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
+        .mode-btn { 
+            background: #0f172a; border: 2px solid var(--border); color: var(--text-muted);
+            padding: 12px; border-radius: 15px; font-size: 13px; font-weight: 600; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mode-btn.active { border-color: var(--primary); color: white; background: rgba(139, 92, 246, 0.1); }
+
+        .manager-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+        .quick-actions { display: flex; gap: 8px; }
+        .action-link { font-size: 12px; color: var(--primary-light); cursor: pointer; font-weight: 600; }
+        .action-link.danger { color: var(--danger); }
+
+        .verb-manager { max-height: 280px; overflow-y: auto; }
+        .verb-row { 
+            display: flex; align-items: center; padding: 12px; 
+            background: rgba(255,255,255,0.02); border-radius: 12px; margin-bottom: 8px;
+        }
+        .verb-info { flex-grow: 1; margin-left: 12px; }
+        .mastered-badge { font-size: 10px; background: var(--success); color: #000; padding: 2px 6px; border-radius: 4px; font-weight: bold; margin-left: 5px; }
+
+        .quiz-inf { font-size: 42px; font-weight: 800; margin: 10px 0; text-align: center; }
+        input[type="text"] { 
+            width: 100%; padding: 18px; font-size: 24px; border-radius: 18px; border: 2px solid var(--border);
+            background: #0f172a; color: white; text-align: center; outline: none; box-sizing: border-box;
+        }
+        .main-btn { 
+            width: 100%; padding: 18px; border-radius: 18px; border: none; font-size: 18px; font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), #7c3aed); color: white; cursor: pointer;
+        }
+        .main-btn:disabled { opacity: 0.5; }
+
+        .heat-card { 
+            background: rgba(239, 68, 68, 0.05); border: 1px solid rgba(239, 68, 68, 0.2);
+            padding: 15px; border-radius: 18px; text-align: center; margin-bottom: 12px;
+            color: var(--danger);
+            transition: all 0.3s ease;
+        }
+
+        .streak-container { display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; }
+        .dot { width: 10px; height: 10px; border-radius: 50%; background: #334155; }
+        .dot.active { background: var(--success); box-shadow: 0 0 8px var(--success); }
+
+        /* Tối ưu Modal cho Mobile */
+        .modal {
+            display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9);
+            z-index: 2000; padding: 10px; backdrop-filter: blur(8px);
+            align-items: center; justify-content: center;
+        }
+
+        .modal-content {
+            background: #1e293b; border-radius: 20px; padding: 20px;
+            max-width: 450px; width: 95%; max-height: 85vh; overflow-y: auto;
+            border: 1px solid #334155; display: flex; flex-direction: column;
+            text-align: center;
+        }
+
+        .lang-section { padding-bottom: 15px; margin-bottom: 15px; border-bottom: 1px dashed #334155; text-align: left; }
+        .lang-title { display: block; font-size: 18px; color: #a78bfa; margin-bottom: 10px; font-weight: bold; }
+        .name-list { background: rgba(255, 255, 255, 0.03); padding: 10px; border-radius: 10px; font-size: 13px; color: #cbd5e1; margin: 10px 0; }
+        
+        .close-modal {
+            background: linear-gradient(135deg, #8b5cf6, #7c3aed); color: white;
+            border: none; padding: 15px; border-radius: 12px; font-weight: bold;
+            cursor: pointer; width: 100%; margin-top: 10px; position: sticky; bottom: 0;
+        }
+
+        .hidden { display: none !important; }
+        .feedback { min-height: 40px; margin-top: 15px; font-weight: 600; text-align: center; }
+        p { margin: 8px 0; color: #94a3b8; }
+        b { color: #f1f5f9; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-nav">
+        <button class="nav-btn" onclick="openModal('guideModal')">Hướng dẫn</button>
+        <button class="nav-btn" onclick="openModal('introModal')">Lời ngỏ</button>
+    </div>
+
+    <div id="setup-area">
+        <div class="card">
+            <h2 style="margin:0 0 15px 0; font-size: 22px; color: var(--primary-light); text-align: center;">🎯 Deutsch Verben B1 Pro.v2.8</h2>
+            <div class="mode-selector" id="mode-selector-container">
+                <div class="mode-btn" data-mode="pres" onclick="setMode('pres', this)">Präsens</div>
+                <div class="mode-btn" data-mode="praet" onclick="setMode('praet', this)">Präteritum</div>
+                <div class="mode-btn" data-mode="perf" onclick="setMode('perf', this)">Perfekt</div>
+                <div class="mode-btn" data-mode="mix" onclick="setMode('mix', this)">Hỗn hợp</div>
+            </div>
+            <button class="main-btn" onclick="startQuiz()">Bắt đầu học ngay</button>
+        </div>
+
+        <div class="card">
+            <div class="manager-header">
+                <h3 style="margin:0; font-size: 16px;">Danh sách động từ</h3>
+                <div class="quick-actions">
+                    <span class="action-link" onclick="toggleAll(true)">Tất cả</span>
+                    <span class="action-link" onclick="toggleAll(false)">Bỏ hết</span>
+                    <span class="action-link danger" onclick="showConfirmReset('streak')">Xóa Streak</span>
+                </div>
+            </div>
+            <div class="verb-manager" id="verb-manager"></div>
+        </div>
+    </div>
+
+    <div id="quiz-area" class="hidden">
+        <div class="card" id="quiz-card-content">
+            <div class="streak-container" id="streak-dots"></div>
+            <div id="quiz-type-label" style="text-align:center; font-size:12px; color:var(--primary-light); font-weight:bold;"></div>
+            <div id="quiz-inf" class="quiz-inf"></div>
+            <div id="quiz-vn" style="text-align:center; color:var(--text-muted); margin-bottom: 20px;"></div>
+            
+            <input type="text" id="answer-input" placeholder="Nhập đáp án..." autocomplete="off">
+            <div id="feedback" class="feedback"></div>
+            <button class="main-btn" id="submit-btn" onclick="checkAnswer()">Kiểm tra</button>
+            <div style="text-align:center; margin-top:20px;">
+                <span class="action-link" onclick="location.reload()">Quay lại Menu</span>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="manager-header">
+                <h4 style="margin:0; font-size:12px; color:var(--danger)">CÁC TỪ HAY SAI</h4>
+                <span class="action-link danger" onclick="showConfirmReset('heatmap')">Xóa danh sách sai</span>
+            </div>
+            <div id="heatmap-cloud"></div>
+        </div>
+    </div>
+</div>
+
+<!-- THÔNG BÁO CHUNG -->
+<div id="customAlert" class="modal">
+    <div class="modal-content">
+        <h2 id="alertTitle" style="color:var(--primary-light); margin-top:0;">Thông báo</h2>
+        <p id="alertMessage" style="color:var(--text-muted);"></p>
+        <div id="alertActions"></div>
+    </div>
+</div>
+
+<!-- MODAL LỜI NGỎ -->
+<div id="introModal" class="modal">
+    <div class="modal-content">
+        <div class="lang-section">
+           <b class="lang-title">Lời ngỏ</b>
+            <p style="font-size: 14px;">Trước hết, tôi xin bày tỏ lòng biết ơn chân thành đến Viện Goethe, ban quản lý và toàn thể giáo viên, nhân viên. Nhờ sự hỗ trợ của mọi người, tôi đã có thể cải thiện đáng kể khả năng tiếng Đức của mình. Thông qua công cụ này, tôi muốn bày tỏ lòng biết ơn và hy vọng rằng nó cũng sẽ hữu ích cho những người học khác. Tôi cũng xin gửi lời cảm ơn đặc biệt đến gia đình, nhất là hai người Mẹ và vợ tôi, những người luôn ủng hộ và là nguồn động lực lớn nhất của tôi.</p>
+            <p style="font-size: 14px;">Cảm ơn:</p>
+            <div class="name-list">
+                Cô Mai Lan Thái , Ngài Arik Jahn , Cô Phương Thư, Thầy Daniel, Thầy Jimmy, Thầy Linh, Cô Quang, Cô Vân Anh, Cô Tú Anh, Cô An, Cô Hoài, Cô Linh Lâm, Cô Anh Thư, Emilie... cùng Chị Nhung và chị Như (người hướng dẫn đầu tiên), Chị Phượng Anh, Chị Dung, Cô Anh Thư, Chị Phương, Anh Nam, Anh Thức, Chị Mơ...
+            </div>
+            <p style="font-size: 14px;">...và tất cả các giáo viên, viên chức khác đã tạo nên một viện tuyệt vời. Xin chân thành cảm ơn.</p>
+        </div>
+
+        <div class="lang-section" style="border:none;">
+            <b class="lang-title">Vorwort</b>
+            <p style="font-size: 14px; font-style: italic;">Zunächst möchte ich mich beim Goethe-Institut, bei der Institutsleitung sowie bei allen Lehrkräften und Mitarbeitern herzlich bedanken. Dank Ihrer Unterstützung konnte ich meine Deutschkenntnisse erheblich verbessern. Mit dieses Tool möchte ich meine Dankbarkeit zum Ausdruck bringen und hoffe, dass er auch anderen Lernenden nützlich sein wird. Ein besonderer Dank gilt meiner Familie, insbesondere zwei meinen beiden Müttern und meiner Frau, die mich stets unterstützen und meine größte Motivationsquelle sind.</p>
+            <div class="name-list" style="font-style: italic;">
+                - Frau Mai Lan Thai <br>
+                - Herrn Arik Jahn <br>
+                - Frau Phuong Thu, Herrn Daniel, Herrn Jimmy, Herrn Linh...<br>
+                - Frau Nhung und Frau Nhu<br>
+                - Herrn Nam, Herrn Thuc, Frau Mo...
+            </div>
+            <p style="font-size: 14px; font-style: italic;">… und allen anderen Lehrern und Mitarbeitern, die das Goethe-Institut zu einem so wunderbaren Ort gemacht haben. Herzlichen Dank.</p>
+        </div>
+        <button class="close-modal" onclick="closeModal('introModal')">ĐÓNG / SCHLIESSEN</button>
+    </div>
+</div>
+
+<!-- MODAL HƯỚNG DẪN -->
+<div id="guideModal" class="modal">
+    <div class="modal-content">
+        <div class="lang-section">
+            <b class="lang-title">Hướng dẫn sử dụng</b>
+            <p style="font-size:13.5px;">1. <b>Luyện tập:</b> Mỗi phiên gồm 10 từ ngẫu nhiên.</p>
+            <p style="font-size:13.5px;">2. <b>Nguyên tắc 3-streak:</b> Bạn phải trả lời đúng 3 lần liên tiếp để hoàn thành một từ. Nếu sai, bộ đếm quay về 0.</p>
+            <p style="font-size:13.5px;">3. <b>Heatmap:</b> Từ nào sai càng nhiều, chữ sẽ hiện <b>CÀNG TO</b> và <b>ĐỎ</b> hơn để bạn dễ nhận diện.</p>
+        </div>
+        <div class="lang-section" style="border:none; font-style:italic;">
+            <b class="lang-title">Bedienungsanleitung</b>
+            <p style="font-size:13.5px;">1. <b>Üben:</b> 15 Wörter pro Sitzung.</p>
+            <p style="font-size:13.5px;">2. <b>3-Streak-Prinzip:</b> Beantworten Sie ein Wort dreimal hintereinander richtig, um es zu meistern.</p>
+            <p style="font-size:13.5px;">3. <b>Heatmap:</b> Wörter mit häufigen Fehlern werden <b>GRÖSSER</b> und <b>RÖTER</b> angezeigt.</p>
+        </div>
+        <button class="close-modal" onclick="closeModal('guideModal')">ĐÓNG / SCHLIESSEN</button>
+    </div>
+</div>
+<script>
+    const verbs = [
+
+{inf: "aufstehen", pres: "steht auf", praet: "stand auf", perf: "ist aufgestanden", vn: "thức dậy"},
+{inf: "ausziehen", zieht: "zieht aus", praet: "zog aus", perf: "ist ausgezogen", vn: "cởi quần áo / chuyển đi"},
+{inf: "backen", pres: "bäckt", praet: "backte", perf: "hat gebacken", vn: "nướng bánh"},
+{inf: "sich befinden", pres: "befindet sich", praet: "befand sich", perf: "hat sich befunden", vn: "nằm ở / tọa lạc tại"},
+{inf: "beginnen", pres: "beginnt", praet: "begann", perf: "hat begonnen", vn: "bắt đầu"},
+{inf: "begreifen", pres: "begreift", praet: "begriff", perf: "hat begriffen", vn: "thấu hiểu / lĩnh hội"},
+{inf: "behalten", pres: "behält", praet: "behielt", perf: "hat behalten", vn: "giữ lại"},
+{inf: "beißen", pres: "beißt", praet: "biss", perf: "hat gebissen", vn: "cắn"},
+{inf: "bekommen", pres: "bekommt", praet: "bekam", perf: "hat bekommen", vn: "nhận được"},
+{inf: "beweisen", pres: "beweist", praet: "bewies", perf: "hat bewiesen", vn: "chứng minh"},
+{inf: "sich bewerben", pres: "bewirbt sich", praet: "bewarb sich", perf: "hat sich beworben", vn: "nộp đơn ứng tuyển"},
+{inf: "sich beziehen auf", pres: "bezieht sich", praet: "bezog sich", perf: "hat sich bezogen", vn: "liên quan đến / tham chiếu đến"},
+{inf: "bieten", pres: "bietet", praet: "bot", perf: "hat geboten", vn: "cung cấp / đề nghị"},
+{inf: "bitten", pres: "bittet", praet: "bat", perf: "hat gebeten", vn: "nhờ vả / yêu cầu"},
+{inf: "bleiben", pres: "bleibt", praet: "blieb", perf: "ist geblieben", vn: "ở lại"},
+{inf: "braten", pres: "brät", praet: "briet", perf: "hat gebraten", vn: "rán / quay / nướng thịt"},
+{inf: "brechen", pres: "bricht", praet: "brach", perf: "hat gebrochen", vn: "làm gãy / phá vỡ"},
+{inf: "brennen", pres: "brennt", praet: "brannte", perf: "hat gebrannt", vn: "cháy / đốt"},
+{inf: "bringen", pres: "bringt", praet: "brachte", perf: "hat gebracht", vn: "mang đến"},
+{inf: "denken", pres: "denkt", praet: "dachte", perf: "hat gedacht", vn: "suy nghĩ"},
+{inf: "dürfen", pres: "darf", praet: "durfte", perf: "hat gedurft", vn: "được phép"},
+{inf: "einfallen", pres: "fällt ein", praet: "fiel ein", perf: "ist eingefallen", vn: "chợt nảy ra (ý tưởng)"},
+{inf: "einladen", pres: "lädt ein", praet: "lud ein", perf: "hat eingeladen", vn: "mời"},
+{inf: "einschlafen", pres: "schläft ein", praet: "schlief ein", perf: "ist eingeschlafen", vn: "ngủ thiếp đi"},
+{inf: "einziehen", pres: "zieht ein", praet: "zog ein", perf: "ist eingezogen", vn: "dọn vào nhà mới"},
+{inf: "empfangen", pres: "empfängt", praet: "empfing", perf: "hat empfangen", vn: "đón tiếp / nhận (tín hiệu)"},
+{inf: "empfehlen", pres: "empfiehlt", praet: "empfahl", perf: "hat empfohlen", vn: "giới thiệu / khuyên bảo"},
+{inf: "empfinden", pres: "empfindet", praet: "empfand", perf: "hat empfunden", vn: "cảm nhận / thấy rằng"},
+{inf: "entlassen", pres: "entlässt", praet: "entließ", perf: "hat entlassen", vn: "cho thôi việc / xuất viện"},
+{inf: "entscheiden", pres: "entscheidet", praet: "entschied", perf: "hat entschieden", vn: "quyết định"},
+{inf: "sich entschließen", pres: "entschließt sich", praet: "entschloss sich", perf: "hat sich entschlossen", vn: "quyết tâm làm gì"},
+{inf: "entstehen", pres: "entsteht", praet: "entstand", perf: "ist entstanden", vn: "hình thành / phát sinh"},
+{inf: "erfahren", pres: "erfährt", praet: "erfuhr", perf: "hat erfahren", vn: "trải nghiệm / biết tin"},
+{inf: "erfinden", pres: "erfindet", praet: "erfand", perf: "hat erfunden", vn: "phát minh"},
+{inf: "erhalten", pres: "erhält", praet: "erhielt", perf: "hat erhalten", vn: "nhận được"},
+{inf: "erkennen", pres: "erkennt", praet: "erkannte", perf: "hat erkannt", vn: "nhận ra / nhận diện"},
+{inf: "erscheinen", pres: "erscheint", praet: "erschien", perf: "ist erschienen", vn: "xuất hiện / xuất bản"},
+{inf: "erschrecken", pres: "erschrickt", praet: "erschrak", perf: "ist erschrocken", vn: "giật mình / hoảng sợ"},
+{inf: "erziehen", pres: "erzieht", praet: "erzog", perf: "hat erzogen", vn: "nuôi dạy / giáo dục"},
+{inf: "essen", pres: "isst", praet: "aß", perf: "hat gegessen", vn: "ăn"},
+{inf: "fahren", pres: "fährt", praet: "fuhr", perf: "ist gefahren", vn: "lái xe / đi xe"},
+{inf: "fallen", pres: "fällt", praet: "fiel", perf: "ist gefallen", vn: "rơi / ngã"},
+{inf: "fangen", pres: "fängt", praet: "fing", perf: "hat gefangen", vn: "bắt / tóm lấy"},
+{inf: "finden", pres: "findet", praet: "fand", perf: "hat gefunden", vn: "tìm thấy"},
+{inf: "fliegen", pres: "fliegt", praet: "flog", perf: "ist geflegen", vn: "bay"},
+{inf: "fliehen", pres: "flieht", praet: "floh", perf: "ist geflohen", vn: "chạy trốn"},
+{inf: "fließen", pres: "fließt", praet: "floss", perf: "ist geflossen", vn: "chảy (dòng nước)"},
+{inf: "fressen", pres: "frisst", praet: "fraß", perf: "hat gegessen", vn: "ăn (dùng cho động vật)"},
+{inf: "frieren", pres: "friert", praet: "fror", perf: "hat gefroren", vn: "thấy lạnh / đóng băng"},
+{inf: "geben", pres: "gibt", praet: "gab", perf: "hat gegeben", vn: "cho / đưa"},
+{inf: "gefallen", pres: "gefällt", praet: "gefiel", perf: "hat gefallen", vn: "thích / làm cho hài lòng"},
+{inf: "gehen", pres: "geht", praet: "ging", perf: "ist gegangen", vn: "đi bộ"},
+{inf: "gelingen", pres: "gelingt", praet: "gelang", perf: "ist gelungen", vn: "thành công"},
+{inf: "gelten", pres: "gilt", praet: "galt", perf: "hat gegolten", vn: "có giá trị / có hiệu lực"},
+{inf: "genießen", pres: "genießt", praet: "genoss", perf: "hat genossen", vn: "thưởng thức / tận hưởng"},
+{inf: "geraten", pres: "gerät", praet: "geriet", perf: "ist geraten", vn: "rơi vào (tình huống)"},
+{inf: "geschehen", pres: "geschieht", praet: "geschah", perf: "ist geschehen", vn: "xảy ra"},
+{inf: "gewinnen", pres: "gewinnt", praet: "gewann", perf: "hat gewonnen", vn: "chiến thắng / đạt giải"},
+{inf: "gießen", pres: "gießt", praet: "goss", perf: "hat gegossen", vn: "tưới (hoa) / rót"},
+{inf: "greifen", pres: "greift", praet: "griff", perf: "hat gegriffen", vn: "nắm lấy / chộp lấy"},
+{inf: "haben", pres: "hat", praet: "hatte", perf: "hat gehabt", vn: "có"},
+{inf: "halten", pres: "hält", praet: "hielt", perf: "hat gehalten", vn: "dừng lại / cầm nắm / giữ"},
+{inf: "hängen", pres: "hängt", praet: "hing", perf: "hat gehangen", vn: "treo (trạng thái đang treo)"},
+{inf: "heben", pres: "hebt", praet: "hob", perf: "hat gehoben", vn: "nâng lên / nhấc lên"},
+{inf: "heißen", pres: "heißt", praet: "hieß", perf: "hat geheißen", vn: "tên là"},
+{inf: "helfen", pres: "hilft", praet: "half", perf: "hat geholfen", vn: "giúp đỡ"},
+{inf: "hinweisen auf", pres: "weist hin", praet: "wies hin", perf: "hat hingewiesen", vn: "chỉ ra / lưu ý về"},
+{inf: "kennen", pres: "kennt", praet: "kannte", perf: "hat gekannt", vn: "biết / quen biết"},
+{inf: "klingen", pres: "klingt", praet: "klang", perf: "hat geklungen", vn: "nghe có vẻ (âm thanh)"},
+{inf: "können", pres: "kann", praet: "konnte", perf: "hat gekonnt", vn: "có thể"},
+{inf: "kommen", pres: "kommt", praet: "kam", perf: "ist gekommen", vn: "đến"},
+{inf: "laden", pres: "lädt", praet: "lud", perf: "hat geladen", vn: "tải / nạp / chất hàng"},
+{inf: "lassen", pres: "lässt", praet: "ließ", perf: "hat gelassen", vn: "để cho / cho phép"},
+{inf: "laufen", pres: "läuft", praet: "lief", perf: "ist gelaufen", vn: "chạy / đi bộ"},
+{inf: "leiden", pres: "leidet", praet: "litt", perf: "hat gelitten", vn: "chịu đựng"},
+{inf: "leihen", pres: "leiht", praet: "lieh", perf: "hat geliehen", vn: "cho mượn / vay"},
+{inf: "lesen", pres: "liest", praet: "las", perf: "hat gelesen", vn: "đọc"},
+{inf: "liegen", pres: "liegt", praet: "lag", perf: "hat gelegen", vn: "nằm / tọa lạc tại"},
+{inf: "lügen", pres: "lügt", praet: "log", perf: "hat gelogen", vn: "nói dối"},
+{inf: "messen", pres: "misst", praet: "maß", perf: "hat gemessen", vn: "đo lường"},
+{inf: "mögen", pres: "mag", praet: "mochte", perf: "hat gemocht", vn: "thích"},
+{inf: "müssen", pres: "muss", praet: "musste", perf: "hat gemusst", vn: "phải (bắt buộc)"},
+{inf: "nachweisen", pres: "weist nach", praet: "wies nach", perf: "hat nachgewiesen", vn: "chứng minh / xác minh"},
+{inf: "nehmen", pres: "nimmt", praet: "nahm", perf: "hat genommen", vn: "cầm / lấy"},
+{inf: "nennen", pres: "nennt", praet: "nannte", perf: "hat genannt", vn: "gọi tên / nêu tên"},
+{inf: "raten", pres: "rät", praet: "riet", perf: "hat geraten", vn: "khuyên / đoán"},
+{inf: "reiben", pres: "reibt", praet: "rieb", perf: "hat gerieben", vn: "cọ xát / chà xát"},
+{inf: "reiten", pres: "reitet", praet: "ritt", perf: "ist geritten", vn: "cưỡi ngựa"},
+{inf: "rennen", pres: "rennt", praet: "rannte", perf: "ist gerannt", vn: "chạy lao đi"},
+{inf: "riechen", pres: "riecht", praet: "roch", perf: "hat gerochen", vn: "ngửi / có mùi"},
+{inf: "rufen", pres: "ruft", praet: "rief", perf: "hat gerufen", vn: "gọi"},
+{inf: "schaffen", pres: "schafft", praet: "schuf", perf: "hat geschaffen", vn: "tạo ra / sáng tạo"},
+{inf: "scheinen", pres: "scheint", praet: "schien", perf: "hat geschienen", vn: "chiếu sáng / dường như"},
+{inf: "schieben", pres: "schiebt", praet: "schob", perf: "hat geschoben", vn: "đẩy / đút vào"},
+{inf: "schießen", pres: "schießt", praet: "schoss", perf: "hat geschossen", vn: "bắn"},
+{inf: "schlafen", pres: "schläft", praet: "schlief", perf: "hat geschlafen", vn: "ngủ"},
+{inf: "schlagen", pres: "schlägt", praet: "schlug", perf: "hat geschlagen", vn: "đánh / đập"},
+{inf: "schließen", pres: "schließt", praet: "schloss", perf: "hat geschlossen", vn: "đóng / kết thúc"},
+{inf: "schmelzen", pres: "schmilzt", praet: "schmolz", perf: "ist geschmolzen", vn: "tan chảy"},
+{inf: "schneiden", pres: "schneidet", praet: "schnitt", perf: "hat geschnitten", vn: "cắt"},
+{inf: "schreiben", pres: "schreibt", praet: "schrieb", perf: "hat geschrieben", vn: "viết"},
+{inf: "schreien", pres: "schreit", praet: "schrie", perf: "hat geschrien", vn: "la hét"},
+{inf: "schweigen", pres: "schweigt", praet: "schwieg", perf: "hat geschwiegen", vn: "im lặng"},
+{inf: "schwimmen", pres: "schwimmt", praet: "schwamm", perf: "ist geschwommen", vn: "bơi"},
+{inf: "sehen", pres: "sieht", praet: "sah", perf: "hat gesehen", vn: "nhìn / xem"},
+{inf: "sein", pres: "ist", praet: "war", perf: "ist gewesen", vn: "thì / là / ở"},
+{inf: "senden", pres: "sendet", praet: "sandte", perf: "hat gesandt", vn: "gửi đi / phát sóng"},
+{inf: "singen", pres: "singt", praet: "sang", perf: "hat gesungen", vn: "hát"},
+{inf: "sinken", pres: "sinkt", praet: "sank", perf: "ist gesunken", vn: "chìm / giảm xuống"},
+{inf: "sitzen", pres: "sitzt", praet: "saß", perf: "hat gesessen", vn: "đang ngồi"},
+{inf: "sollen", pres: "soll", praet: "sollte", perf: "hat gesollt", vn: "nên / phải (theo lời khuyên)"},
+{inf: "sprechen", pres: "spricht", praet: "sprach", perf: "hat gesprochen", vn: "nói"},
+{inf: "springen", pres: "springt", praet: "sprang", perf: "ist gesprungen", vn: "nhảy"},
+{inf: "stechen", pres: "sticht", praet: "stach", perf: "hat gestochen", vn: "đâm / chích (côn trùng)"},
+{inf: "stehen", pres: "steht", praet: "stand", perf: "hat gestanden", vn: "đang đứng"},
+{inf: "stehlen", pres: "stiehlt", praet: "stahl", perf: "hat gestohlen", vn: "ăn trộm"},
+{inf: "steigen", pres: "steigt", praet: "stieg", perf: "ist gestiegen", vn: "tăng lên / leo lên"},
+{inf: "sterben", pres: "stirbt", praet: "starb", perf: "ist gestorben", vn: "chết"},
+{inf: "stoßen", pres: "stößt", praet: "stieß", perf: "hat gestoßen", vn: "đẩy / va chạm"},
+{inf: "streichen", pres: "streicht", praet: "strich", perf: "hat gestrichen", vn: "sơn / gạch bỏ"},
+{inf: "streiten", pres: "streitet", praet: "stritt", perf: "hat gestritten", vn: "cãi nhau"},
+{inf: "tragen", pres: "trägt", praet: "trug", perf: "hat getragen", vn: "mặc / mang / vác"},
+{inf: "treffen", pres: "trifft", praet: "traf", perf: "hat getroffen", vn: "gặp gỡ"},
+{inf: "treten", pres: "tritt", praet: "trat", perf: "hat getreten", vn: "bước đi / dẫm đạp"},
+{inf: "trinken", pres: "trinkt", praet: "trank", perf: "hat getrunken", vn: "uống"},
+{inf: "tun", pres: "tut", praet: "tat", perf: "hat getan", vn: "làm"},
+{inf: "übertreiben", pres: "übertreibt", praet: "übertrieb", perf: "hat übertrieben", vn: "nói quá / phóng đại"},
+{inf: "sich unterhalten", pres: "unterhält sich", praet: "unterhielt sich", perf: "hat sich unterhalten", vn: "trò chuyện / giải trí"},
+{inf: "unterbrechen", pres: "unterbricht", praet: "unterbrach", perf: "hat thực hiện / ngắt quãng"},
+{inf: "unternehmen", pres: "unternimmt", praet: "unternahm", perf: "hat unternommen", vn: "đảm nhận / thực hiện (chuyến đi/dự án)"},
+{inf: "unterscheiden", pres: "unterscheidet", praet: "unterschied", perf: "hat unterschieden", vn: "phân biệt"},
+{inf: "verbieten", pres: "verbietet", praet: "verbot", perf: "hat verboten", vn: "cấm"},
+{inf: "verbinden", pres: "verbindet", praet: "verband", perf: "hat verbunden", vn: "kết nối"},
+{inf: "verbringen", pres: "verbringt", praet: "verbrachte", perf: "hat verbracht", vn: "trải qua (thời gian)"},
+{inf: "vergehen", pres: "vergeht", praet: "verging", perf: "ist vergangen", vn: "trôi qua (thời gian)"},
+{inf: "vergessen", pres: "vergisst", praet: "vergaß", perf: "hat vergessen", vn: "quên"},
+{inf: "vergleichen", pres: "vergleicht", praet: "verglich", perf: "hat verglichen", vn: "so sánh"},
+{inf: "sich verhalten", pres: "verhält sich", praet: "verhielt sich", perf: "hat sich verhalten", vn: "ứng xử / có thái độ"},
+{inf: "verlassen", pres: "verlässt", praet: "verließ", perf: "hat verlassen", vn: "rời bỏ / rời khỏi"},
+{inf: "verlieren", pres: "verliert", praet: "verlor", perf: "hat verloren", vn: "làm mất / thua"},
+{inf: "vermeiden", pres: "vermeidet", praet: "vermied", perf: "hat vermieden", vn: "tránh né"},
+{inf: "verraten", pres: "verrät", praet: "verriet", perf: "hat verraten", vn: "tiết lộ / phản bội"},
+{inf: "verschieben", pres: "verschiebt", praet: "verschob", perf: "hat cố ý / trì hoãn"},
+{inf: "verschlingen", pres: "verschlingt", praet: "verschlang", perf: "hat verschlungen", vn: "nuốt chửng / đọc ngấu nghiến"},
+{inf: "verschwinden", pres: "verschwindet", praet: "verschwand", perf: "ist verschwunden", vn: "biến mất"},
+{inf: "versprechen", pres: "verspricht", praet: "versprach", perf: "hat versprochen", vn: "hứa"},
+{inf: "verstehen", pres: "versteht", praet: "verstand", perf: "hat verstanden", vn: "hiểu"},
+{inf: "vertreiben", pres: "vertreibt", praet: "vertrieb", perf: "hat vertrieben", vn: "xua đuổi / bán hàng"},
+{inf: "verzeihen", pres: "verzeiht", praet: "verzieh", perf: "hat verziehen", vn: "tha thứ"},
+{inf: "vorhaben", pres: "hat vor", praet: "hatte vor", perf: "hat vorgehabt", vn: "dự định"},
+{inf: "vorkommen", pres: "kommt vor", praet: "kam vor", perf: "ist vorgekommen", vn: "xảy ra / tồn tại"},
+{inf: "vorschlagen", pres: "schlägt vor", praet: "schlug vor", perf: "hat vorgeschlagen", vn: "đề xuất"},
+{inf: "vortragen", pres: "trägt vor", praet: "trug vor", perf: "hat vorgetragen", vn: "trình bày / thuyết trình"},
+{inf: "wachsen", pres: "wächst", praet: "wuchs", perf: "ist gewachsen", vn: "lớn lên / phát triển"},
+{inf: "waschen", pres: "wäscht", praet: "wusch", perf: "hat gewaschen", vn: "giặt / rửa"},
+{inf: "werben", pres: "wirbt", praet: "warb", perf: "hat geworben", vn: "quảng cáo / chiêu mộ"},
+{inf: "werden", pres: "wird", praet: "wurde", perf: "ist geworden", vn: "trở nên / trở thành"},
+{inf: "werfen", pres: "wirft", praet: "warf", perf: "hat geworfen", vn: "ném"},
+{inf: "wiegen", pres: "wiegt", praet: "wog", perf: "hat gewogen", vn: "cân nặng"},
+{inf: "wissen", pres: "weiß", praet: "wusste", perf: "hat gewusst", vn: "biết (thông tin)"},
+{inf: "wollen", pres: "will", praet: "wollte", perf: "hat gewollt", vn: "muốn"},
+{inf: "ziehen", pres: "zieht", praet: "zog", perf: "hat gezogen", vn: "kéo"},
+{inf: "zerbrechen", pres: "zerbricht", praet: "zerbrach", perf: "ist zerbrochen", vn: "làm vỡ vụn"},
+{inf: "zugegeben", pres: "gibt zu", praet: "gab zu", perf: "hat zugegeben", vn: "thừa nhận"},
+{inf: "zwingen", pres: "zwingt", praet: "zwang", perf: "hat gezwungen", vn: "ép buộc"}
+
+    ];
+
+    let mastery = JSON.parse(localStorage.getItem('de_mastery_v38')) || {};
+    verbs.forEach(v => {
+        if(!mastery[v.inf]) mastery[v.inf] = { pres_streak: 0, praet_streak: 0, perf_streak: 0, wrong_count: 0, active: true };
+    });
+
+    let currentMode = localStorage.getItem('de_last_mode_v38') || 'pres';
+    let sessionList = [];
+    let currentIndex = 0;
+    let isProcessing = false;
+
+    function save() { 
+        localStorage.setItem('de_mastery_v38', JSON.stringify(mastery)); 
+        localStorage.setItem('de_last_mode_v38', currentMode);
+        renderHeatmap(); 
+    }
+    
+    function openModal(id) { document.getElementById(id).style.display = "flex"; }
+    function closeModal(id) { document.getElementById(id).style.display = "none"; }
+
+    function showAlert(title, message, callback) {
+        document.getElementById('alertTitle').innerText = title;
+        document.getElementById('alertMessage').innerText = message;
+        const actions = document.getElementById('alertActions');
+        actions.innerHTML = `<button class="main-btn" onclick="closeModal('customAlert'); if(${callback}) ${callback}();">Đã hiểu</button>`;
+        openModal('customAlert');
+    }
+
+    function showConfirmReset(type) {
+        document.getElementById('alertTitle').innerText = "Xác nhận";
+        document.getElementById('alertMessage').innerText = type === 'streak' ? "Xóa toàn bộ tiến độ Streak?" : "Xóa sạch danh sách các từ đã sai?";
+        const actions = document.getElementById('alertActions');
+        actions.innerHTML = `
+            <button class="main-btn" style="background:var(--danger); margin-bottom:10px" onclick="resetData('${type}')">Xác nhận xóa</button>
+            <button class="main-btn" style="background:var(--border)" onclick="closeModal('customAlert')">Hủy bỏ</button>
+        `;
+        openModal('customAlert');
+    }
+
+    function resetData(type) {
+        if(type === 'streak') {
+            verbs.forEach(v => { mastery[v.inf].pres_streak = 0; mastery[v.inf].praet_streak = 0; mastery[v.inf].perf_streak = 0; });
+            renderManager();
+        } else {
+            verbs.forEach(v => { mastery[v.inf].wrong_count = 0; });
+        }
+        save();
+        closeModal('customAlert');
+    }
+
+    function toggleAll(status) {
+        verbs.forEach(v => mastery[v.inf].active = status);
+        save(); renderManager();
+    }
+
+    function renderManager() {
+        const container = document.getElementById("verb-manager");
+        container.innerHTML = verbs.map(v => {
+            const m = mastery[v.inf];
+            const isDone = m.pres_streak >= 3 && m.praet_streak >= 3 && m.perf_streak >= 3;
+            return `
+                <div class="verb-row">
+                    <input type="checkbox" ${m.active ? 'checked' : ''} onchange="mastery['${v.inf}'].active = !mastery['${v.inf}'].active; save();">
+                    <div class="verb-info">
+                        <span style="font-weight:600">${v.inf} ${isDone ? '<span class="mastered-badge">✔ DONE</span>' : ''}</span>
+                        <div style="font-size:11px; color:var(--text-muted)">${v.vn}</div>
+                    </div>
+                    <div style="font-size:10px; color:var(--text-muted)">
+                        ${m.pres_streak}/3 · ${m.praet_streak}/3 · ${m.perf_streak}/3
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function renderHeatmap() {
+        const cloud = document.getElementById("heatmap-cloud");
+        const wrongOnes = verbs.filter(v => mastery[v.inf].wrong_count > 0);
+        if (wrongOnes.length === 0) { cloud.innerHTML = "<p style='font-size:11px; color:var(--text-muted)'>Chưa có lỗi sai nào.</p>"; return; }
+        
+        cloud.innerHTML = wrongOnes.sort((a,b) => mastery[b.inf].wrong_count - mastery[a.inf].wrong_count).map(v => {
+            const count = mastery[v.inf].wrong_count;
+            const fontSize = Math.min(18 + (count * 3), 50);
+            const fontWeight = Math.min(400 + (count * 100), 900);
+            return `
+                <div class="heat-card">
+                    <div style="font-size:${fontSize}px; font-weight:${fontWeight}; line-height: 1.2;">
+                        ${v.pres} | ${v.praet} | ${v.perf}
+                    </div>
+                    <div style="font-size:11px; opacity:0.7; color:var(--text-muted); margin-top:5px;">
+                        ${v.inf} (${v.vn}) - Lỗi: ${count}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+
+    function setMode(m, btn) {
+        currentMode = m;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+        localStorage.setItem('de_last_mode_v38', currentMode);
+    }
+
+    function initMode() {
+        const btns = document.querySelectorAll('.mode-btn');
+        btns.forEach(btn => {
+            if(btn.getAttribute('data-mode') === currentMode) btn.classList.add('active');
+            else btn.classList.remove('active');
+        });
+    }
+
+    function startQuiz() {
+        sessionList = verbs.filter(v => {
+            if (!mastery[v.inf].active) return false;
+            if (currentMode === 'mix') return mastery[v.inf].pres_streak < 3 || mastery[v.inf].praet_streak < 3 || mastery[v.inf].perf_streak < 3;
+            return mastery[v.inf][currentMode + '_streak'] < 3;
+        });
+
+        if(sessionList.length === 0) {
+            showAlert("Thông báo", "Tất cả các từ đã được thuộc (3/3)!");
+            return;
+        }
+        
+   // 1. Lấy 30 từ đầu tiên làm "bể chứa" ưu tiên
+const priorityPool = sessionList.slice(0, 30);
+// 2. Những từ còn lại trong danh sách
+const remainingPool = sessionList.slice(30);
+
+// 3. Chọn 10 từ đầu tiên từ bể ưu tiên
+const top10 = priorityPool.slice(0, 10);
+
+// 4. Lấy 5 từ ngẫu nhiên từ phần còn lại (gồm 20 từ cuối của pool 30 và toàn bộ pool còn lại)
+const restOfList = [...priorityPool.slice(10), ...remainingPool];
+const random5 = restOfList.sort(() => 0.5 - Math.random()).slice(0, 5);
+
+// 5. Gộp lại thành 15 từ và gán task
+const selectedWords = [...top10, ...random5];
+
+const finalSession = selectedWords.map(v => {
+    let t = currentMode;
+    if (currentMode === 'mix') {
+        const tasks = [];
+        const m = mastery[v.inf];
+        if (m.pres_streak < 3) tasks.push('pres');
+        if (m.praet_streak < 3) tasks.push('praet');
+        if (m.perf_streak < 3) tasks.push('perf');
+        
+        // Nếu đã thuộc hết streak thì mặc định lấy 'pres' hoặc ngẫu nhiên
+        t = tasks.length > 0 ? tasks[Math.floor(Math.random() * tasks.length)] : 'pres';
+    }
+    return { ...v, task: t };
+});
+
+// Nếu muốn 15 từ này xuất hiện xáo trộn vị trí khi học:
+// finalSession.sort(() => 0.5 - Math.random());
+
+
+
+
+        currentIndex = 0;
+        document.getElementById("setup-area").classList.add("hidden");
+        document.getElementById("quiz-area").classList.remove("hidden");
+        renderHeatmap();
+        loadVerb();
+    }
+
+    function loadVerb() {
+        isProcessing = false;
+        document.getElementById("submit-btn").disabled = false;
+        
+        if(currentIndex >= sessionList.length) {
+            const card = document.getElementById("quiz-card-content");
+            card.innerHTML = `
+                <div style="text-align:center; padding: 20px 0;">
+                    <div style="font-size: 50px; margin-bottom: 10px;">🎉</div>
+                    <h2 style="color:var(--success); margin-top:0;">Hoàn thành!</h2>
+                    <button class="main-btn" onclick="location.reload()">Quay lại Menu</button>
+                </div>
+            `;
+            return;
+        }
+
+        const v = sessionList[currentIndex];
+        const s = mastery[v.inf][v.task + '_streak'];
+        document.getElementById("quiz-type-label").innerText = v.task.toUpperCase();
+        document.getElementById("quiz-inf").innerText = v.inf;
+        document.getElementById("quiz-vn").innerText = `(${v.vn})`;
+        const dots = document.getElementById("streak-dots");
+        dots.innerHTML = `<div class="dot ${s>=1?'active':''}"></div><div class="dot ${s>=2?'active':''}"></div><div class="dot ${s>=3?'active':''}"></div>`;
+        const input = document.getElementById("answer-input");
+        input.value = ""; input.focus();
+        document.getElementById("feedback").innerHTML = "";
+        input.onkeypress = (e) => { if(e.key === 'Enter' && !isProcessing) checkAnswer(); };
+    }
+
+    function checkAnswer() {
+        if(isProcessing) return;
+        const input = document.getElementById("answer-input").value.trim().toLowerCase();
+        if(!input) return;
+
+        isProcessing = true;
+        document.getElementById("submit-btn").disabled = true;
+        const v = sessionList[currentIndex];
+        const target = v[v.task].toLowerCase();
+        const fb = document.getElementById("feedback");
+
+        if(input === target) {
+            fb.innerHTML = `<span style="color:var(--success)">Chính xác!</span>`;
+            if(mastery[v.inf][v.task + '_streak'] < 3) mastery[v.inf][v.task + '_streak']++;
+        } else {
+            fb.innerHTML = `<span style="color:var(--danger)">Sai! Đáp án: ${target}</span>`;
+            mastery[v.inf][v.task + '_streak'] = 0;
+            mastery[v.inf].wrong_count++;
+        }
+        save();
+        setTimeout(() => { currentIndex++; loadVerb(); }, 1500);
+    }
+
+    window.onload = () => {
+        renderManager();
+        initMode();
+        renderHeatmap();
+    };
+</script>
+</body>
+</html>
+
+<script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js');
+    });
+  }
+</script>
+<link rel="manifest" href="/manifest.json">
