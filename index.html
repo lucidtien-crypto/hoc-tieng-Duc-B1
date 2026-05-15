@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="vi">
+
+
+
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Deutsch B2 Pro Trainer</title>
-    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>Deutsch B1 Pro Trainer</title>
+	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0f1d;
@@ -18,6 +22,7 @@
         }
 
         body {
+            /* Áp dụng font Nunito cho toàn bộ ứng dụng */
             font-family: 'Nunito', Roboto, Helvetica, Arial, sans-serif;
             background: radial-gradient(circle at top right, #1e1b4b, #0a0f1d);
             color: var(--text);
@@ -56,7 +61,7 @@
         }
 
         .quiz-vn { font-size: 26px; font-weight: 700; text-align: center; margin: 15px 0; line-height: 1.4; }
-        .type-tag { 
+		.type-tag { 
             display: inline-block; padding: 4px 12px; background: rgba(167, 139, 250, 0.2); 
             color: var(--primary); border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase;
         }
@@ -78,9 +83,10 @@
             letter-spacing: 1px; 
             font-variant-ligatures: none; 
             
-            resize: none; 
-            line-height: 1.5; 
-            overflow: hidden; 
+            /* 3 DÒNG MỚI DÀNH RIÊNG CHO TEXTAREA */
+            resize: none; /* Cấm kéo giãn khung lung tung */
+            line-height: 1.5; /* Khoảng cách dòng thoáng mắt */
+            overflow: hidden; /* Giấu thanh cuộn dọc cho đẹp */
         }
 
         .feedback-box { min-height: 70px; margin: 15px 0; text-align: center; font-size: 14px; }
@@ -103,8 +109,8 @@
 <div class="container">
     <div id="menu-screen">
         <div class="glass-card">
-            <h2>Vokabelübung Kontext B2.1 <span id="lek-stats" style="font-size: 14px; font-weight: normal; color: var(--success); margin-left: 10px; background: rgba(52, 211, 153, 0.1); padding: 4px 10px; border-radius: 12px;">0/0</span></h2>
-            
+            <h2>Vokabelübung B1 <span id="lek-stats" style="font-size: 14px; font-weight: normal; color: var(--success); margin-left: 10px; background: rgba(52, 211, 153, 0.1); padding: 4px 10px; border-radius: 12px;">0/0</span></h2>
+			
             <div id="lek-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;"></div>
             
             <div style="display: flex; gap: 8px; margin-bottom: 20px;">
@@ -112,31 +118,33 @@
                 <button class="btn-main" id="btn-adv" onclick="startAdvancedMode()" style="background: linear-gradient(135deg, #f59e0b, #ef4444); padding: 8px; font-size: 14px; flex: 1; border-radius: 10px;">🔥 Nâng cao B2</button>
             </div>
 
+            <!-- Nút Bắt đầu học bình thường -->
             <button class="btn-main" onclick="startSession('normal')">Bắt đầu học (5 từ)/Lerne (5 Wörter)</button>
             
+            <!-- CHIA NÚT ÔN TẬP LÀM 2 -->
             <div style="display: flex; gap: 8px; margin-top: 10px;">
-                <button class="btn-main" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('mixed')">🔥 Ôn hỗn hợp (Tính Streak)</button>
-                <button class="btn-main" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('quick')">⚡ Ôn nhanh (Không phạt)</button>
+                <button class="btn-main" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('mixed')">🔥 Ôn hỗn hợp (Tính Streak)-Gemischte Lernen</button>
+                <button class="btn-main" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('quick')">⚡ Ôn nhanh (Không phạt)- Kurzrezension (Kein Steak ging verloren)!</button>
             </div>
             
             <div style="display: flex; gap: 8px; margin-top: 15px;">
-                <button class="btn-sub" style="color: #34d399; border-color: #34d399; font-weight: bold;" onclick="exportData()">💾 Sao lưu</button>
-                <button class="btn-sub" style="color: #60a5fa; border-color: #60a5fa; font-weight: bold;" onclick="importData()">📂 Phục hồi</button>
+                <button class="btn-sub" style="color: #34d399; border-color: #34d399; font-weight: bold;" onclick="exportData()">💾 Sao lưu Streak / Streak-Backup</button>
+                <button class="btn-sub" style="color: #60a5fa; border-color: #60a5fa; font-weight: bold;" onclick="importData()">📂 Phục hồi Streak / Streak wiederherstellung</button>
             </div>
         </div>
         
         <div class="glass-card">
             <div class="btn-group">
-                <button class="btn-sub" onclick="toggleAll(true)">Chọn hết</button>
-                <button class="btn-sub" onclick="toggleAll(false)">Bỏ chọn</button>
-                <button class="btn-sub" style="color: var(--danger)" onclick="resetStreak()">Xóa Streak</button>
+                <button class="btn-sub" onclick="toggleAll(true)">Chọn hết/Alle auswählen</button>
+                <button class="btn-sub" onclick="toggleAll(false)">Bỏ chọn/Auswahl aufheben</button>
+                <button class="btn-sub" style="color: var(--danger)" onclick="resetStreak()">Xóa Streak/Streak löschen</button>
             </div>
             <div id="vocab-list" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
     </div>
 
     <div id="quiz-screen" class="hidden">
-        <div style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 15px; font-style: italic;">
+		<div style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 15px; font-style: italic;">
             💡 <b>Công thức chuẩn:</b> [sich Akk/Dat] + [Giới từ] + jemanden / jemandem / etwas (Akk/Dat) + <b>[Động từ ở cuối]</b>
         </div>
         <div class="glass-card">
@@ -151,7 +159,7 @@
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
                 <span style="font-size: 13px; font-weight: 700; color: var(--danger)">TỪ HAY SAI (HEATMAP)</span>
-                <span style="font-size: 11px; cursor: pointer; opacity: 0.6" onclick="resetHeat()">Xóa hết</span>
+                <span style="font-size: 11px; cursor: pointer; opacity: 0.6" onclick="resetHeat()">Xóa hết - Alles löschen</span>
             </div>
             <div id="heat-cloud"></div>
         </div>
@@ -159,33 +167,1854 @@
 </div>
 
 <script>
-    // Dữ liệu test
+
+
+    // BẠN DÁN DATA CỦA BẠN VÀO ĐÂY NHÉ
     const data = [
-       {
-        "word": "verantwortlich",
-        "ans": "für jemanden/etwas verantwortlich sein",
-        "type": "Adjektiv",
-        "forms": "ist verantwortlich, war verantwortlich, ist verantwortlich gewesen",
-        "vnword": "có trách nhiệm",
-        "vnans": "chịu trách nhiệm về ai/cái gì",
-        "b1_ex": "Ich bin für das Projekt verantwortlich.",
-        "vn_b1": "Tôi chịu trách nhiệm về dự án này.",
-        "b2_ex": "Es ist wichtig, dass jeder für seine eigenen Fehler verantwortlich ist.",
-        "vn_b2": "Điều quan trọng là mỗi người phải tự chịu trách nhiệm về lỗi lầm của chính mình.",
-        "lek": 1
-    }
+      {
+    "word": "andererseits",
+    "ans": "etwas andererseits betrachten",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "einerseits",
+    "ant_b2": "hingegen",
+    "vnword": "mặt khác",
+    "vnans": "xem xét cái gì đó ở mặt khác",
+    "b1_ex": "Das Auto ist teuer, aber andererseits ist es sehr sicher.",
+    "vn_b1": "Chiếc xe này đắt, nhưng mặt khác nó rất an toàn.",
+    "b2_ex": "Einerseits möchte er reisen, andererseits muss er für die Prüfungen lernen.",
+    "vn_b2": "Một mặt anh ấy muốn đi du lịch, mặt khác anh ấy phải học cho các kỳ thi.",
+    "lek": 1
+  },
+  {
+    "word": "die Änderung, en",
+    "ans": "eine Änderung an etwas (Dat) vornehmen",
+    "type": "Nomen",
+    "forms": "Gen: der Änderung, Pl: die Änderungen",
+    "ant_b1": "",
+    "ant_b2": "die Beständigkeit",
+    "vnword": "sự thay đổi",
+    "vnans": "thực hiện một sự thay đổi đối với cái gì đó",
+    "b1_ex": "Es gibt eine kleine Änderung im Plan.",
+    "vn_b1": "Có một thay đổi nhỏ trong kế hoạch.",
+    "b2_ex": "Die kurzfristige Änderung des Termins verursachte bei den Kunden große Verwirrung.",
+    "vn_b2": "Việc thay đổi lịch hẹn đột ngột đã gây ra sự bối rối lớn cho khách hàng.",
+    "lek": 1
+  },
+  {
+    "word": "ängstlich",
+    "ans": "gegenüber etwas (Dat) ängstlich sein",
+    "type": "Adjektiv",
+    "forms": "ängstlicher, am ängstlichsten",
+    "ant_b1": "mutig",
+    "ant_b2": "furchtlos",
+    "vnword": "lo sợ, nhút nhát",
+    "vnans": "lo sợ đối với cái gì đó",
+    "b1_ex": "Das Kind ist sehr ängstlich im Dunkeln.",
+    "vn_b1": "Đứa trẻ rất sợ hãi trong bóng tối.",
+    "b2_ex": "Trotz seiner Erfahrung reagierte er in der Krise unerwartet ängstlich.",
+    "vn_b2": "Bất chấp kinh nghiệm của mình, ông ấy đã phản ứng lo sợ bất ngờ trong cuộc khủng hoảng.",
+    "lek": 1
+  },
+  {
+    "word": "anhaben",
+    "ans": "etwas (Akk) anhaben",
+    "type": "Verb",
+    "forms": "hat an, hatte an, hat angehabt",
+    "ant_b1": "ausziehen",
+    "ant_b2": "ablegen",
+    "vnword": "mặc (trên người)",
+    "vnans": "đang mặc cái gì đó",
+    "b1_ex": "Was hast du heute zur Party an?",
+    "vn_b1": "Hôm nay bạn mặc gì đến bữa tiệc thế?",
+    "b2_ex": "Sie hatte einen eleganten Mantel an, der perfekt zu ihrem Kleid passte.",
+    "vn_b2": "Cô ấy đã mặc một chiếc áo khoác thanh lịch, cái mà hợp hoàn hảo với váy của cô ấy.",
+    "lek": 1
+  },
+  {
+    "word": "ankommen",
+    "ans": "auf etwas (Akk) ankommen",
+    "type": "Verb",
+    "forms": "kommt an, kam an, ist angekommen",
+    "ant_b1": "abfahren",
+    "ant_b2": "",
+    "vnword": "phụ thuộc vào / đến nơi",
+    "vnans": "phụ thuộc vào điều gì đó",
+    "b1_ex": "Wann kommt der Zug in Berlin an?",
+    "vn_b1": "Khi nào tàu hỏa đến Berlin?",
+    "b2_ex": "Es kommt auf die richtige Vorbereitung an, ob man die Prüfung besteht.",
+    "vn_b2": "Việc có đỗ kỳ thi hay không phụ thuộc vào sự chuẩn bị đúng đắn.",
+    "lek": 1
+  },
+  {
+    "word": "ankündigen",
+    "ans": "jemandem etwas (Akk) ankündigen",
+    "type": "Verb",
+    "forms": "kündigt an, kündigte an, hat angekündigt",
+    "ant_b1": "",
+    "ant_b2": "verheimlichen",
+    "vnword": "thông báo, báo trước",
+    "vnans": "thông báo cho ai đó điều gì",
+    "b1_ex": "Die Firma kündigt ein neues Produkt an.",
+    "vn_b1": "Công ty thông báo một sản phẩm mới.",
+    "b2_ex": "Der Regierungssprecher kündigte weitreichende Reformen für das kommende Jahr an.",
+    "vn_b2": "Người phát ngôn chính phủ đã thông báo những cải cách sâu rộng cho năm tới.",
+    "lek": 1
+  },
+  {
+    "word": "die Anlage, n",
+    "ans": "eine technische Anlage bedienen",
+    "type": "Nomen",
+    "forms": "Gen: der Anlage, Pl: die Anlagen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "thiết bị, cơ sở, khu phức hợp",
+    "vnans": "vận hành một thiết bị kỹ thuật",
+    "b1_ex": "Die Hotelanlage ist sehr modern und sauber.",
+    "vn_b1": "Khuôn viên khách sạn rất hiện đại và sạch sẽ.",
+    "b2_ex": "Die industrielle Anlage muss regelmäßig auf Sicherheitsmängel überprüft werden.",
+    "vn_b2": "Cơ sở công nghiệp phải được kiểm tra thường xuyên về các lỗi an toàn.",
+    "lek": 1
+  },
+  {
+    "word": "die Anleitung, en",
+    "ans": "etwas nach einer Anleitung bauen",
+    "type": "Nomen",
+    "forms": "Gen: der Anleitung, Pl: die Anleitungen",
+    "ant_b1": "",
+    "ant_b2": "die Instruktion",
+    "vnword": "sự hướng dẫn",
+    "vnans": "xây dựng cái gì đó theo hướng dẫn",
+    "b1_ex": "Ich kann die Anleitung für das Regal nicht finden.",
+    "vn_b1": "Tôi không thể tìm thấy hướng dẫn cho cái kệ.",
+    "b2_ex": "Ohne eine präzise Anleitung ist die Software kaum korrekt zu installieren.",
+    "vn_b2": "Nếu không có hướng dẫn chính xác, phần mềm khó có thể được cài đặt đúng.",
+    "lek": 1
+  },
+  {
+    "word": "sich anmelden",
+    "ans": "sich für etwas (Akk) anmelden",
+    "type": "Verb",
+    "forms": "meldet sich an, meldete sich an, hat sich angemeldet",
+    "ant_b1": "sich abmelden",
+    "ant_b2": "sich immatrikulieren",
+    "vnword": "đăng ký",
+    "vnans": "đăng ký cho cái gì đó",
+    "b1_ex": "Wo kann ich mich für den Deutschkurs anmelden?",
+    "vn_b1": "Tôi có thể đăng ký khóa học tiếng Đức ở đâu?",
+    "b2_ex": "Interessenten sollten sich frühzeitig für die internationale Konferenz anmelden.",
+    "vn_b2": "Những người quan tâm nên đăng ký sớm cho hội nghị quốc tế.",
+    "lek": 1
+  },
+  {
+    "word": "annehmen",
+    "ans": "etwas (Akk) annehmen",
+    "type": "Verb",
+    "forms": "nimmt an, nahm an, hat angenommen",
+    "ant_b1": "ablehnen",
+    "ant_b2": "verweigern",
+    "vnword": "chấp nhận, giả định",
+    "vnans": "chấp nhận cái gì đó",
+    "b1_ex": "Ich nehme deine Einladung gerne an.",
+    "vn_b1": "Tôi rất vui lòng nhận lời mời của bạn.",
+    "b2_ex": "Wir können unter diesen Umständen das Angebot leider nicht annehmen.",
+    "vn_b2": "Trong hoàn cảnh này, chúng tôi rất tiếc không thể chấp nhận lời đề nghị.",
+    "lek": 1
+  },
+  {
+    "word": "die Annonce, n",
+    "ans": "eine Annonce in der Zeitung lesen",
+    "type": "Nomen",
+    "forms": "Gen: der Annonce, Pl: die Annoncen",
+    "ant_b1": "",
+    "ant_b2": "die Anzeige",
+    "vnword": "mẩu quảng cáo, thông báo (trên báo)",
+    "vnans": "đọc một mẩu quảng cáo trên báo",
+    "b1_ex": "Ich habe eine Annonce für eine Wohnung gesehen.",
+    "vn_b1": "Tôi đã thấy một mẩu quảng cáo cho một căn hộ.",
+    "b2_ex": "Durch eine kleine Annonce fand er schließlich einen Käufer für sein altes Klavier.",
+    "vn_b2": "Thông qua một mẩu quảng cáo nhỏ, cuối cùng anh ấy đã tìm được người mua chiếc đàn piano cũ.",
+    "lek": 1
+  },
+  {
+    "word": "die Anrede, n",
+    "ans": "auf die richtige Anrede achten",
+    "type": "Nomen",
+    "forms": "Gen: der Anrede, Pl: die Anreden",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "cách xưng hô",
+    "vnans": "chú ý đến cách xưng hô đúng",
+    "b1_ex": "Die Anrede in einem Brief ist sehr wichtig.",
+    "vn_b1": "Cách xưng hô trong một bức thư rất quan trọng.",
+    "b2_ex": "In formellen E-Mails sollte man die korrekte akademische Anrede verwenden.",
+    "vn_b2": "Trong các email trang trọng, người ta nên sử dụng cách xưng hô học thuật chính xác.",
+    "lek": 1
+  },
+  {
+    "word": "anrufen",
+    "ans": "jemanden (Akk) anrufen",
+    "type": "Verb",
+    "forms": "ruft an, rief an, hat angerufen",
+    "ant_b1": "",
+    "ant_b2": "telefonisch kontaktieren",
+    "vnword": "gọi điện thoại",
+    "vnans": "gọi điện cho ai đó",
+    "b1_ex": "Kannst du mich morgen Abend anrufen?",
+    "vn_b1": "Bạn có thể gọi cho tôi vào tối mai không?",
+    "b2_ex": "Falls Probleme auftreten, rufen Sie bitte umgehend den technischen Support an.",
+    "vn_b2": "Nếu có vấn đề phát sinh, vui lòng gọi điện ngay cho bộ phận hỗ trợ kỹ thuật.",
+    "lek": 1
+  },
+  {
+    "word": "anschaffen",
+    "ans": "sich (Dat) etwas (Akk) anschaffen",
+    "type": "Verb",
+    "forms": "schafft an, schaffte an, hat angeschafft",
+    "ant_b1": "kaufen",
+    "ant_b2": "erwerben",
+    "vnword": "sắm sửa, mua sắm",
+    "vnans": "sắm sửa cho bản thân cái gì đó",
+    "b1_ex": "Wir wollen uns ein neues Auto anschaffen.",
+    "vn_b1": "Chúng tôi muốn sắm một chiếc xe hơi mới.",
+    "b2_ex": "Die Universität hat neue Computer für den gesamten IT-Bereich angeschafft.",
+    "vn_b2": "Trường đại học đã sắm mới máy tính cho toàn bộ khu vực CNTT.",
+    "lek": 1
+  },
+  {
+    "word": "anschließen",
+    "ans": "etwas (Akk) an etwas (Akk/Dat) anschließen",
+    "type": "Verb",
+    "forms": "schließt an, schloss an, hat angeschlossen",
+    "ant_b1": "verbinden",
+    "ant_b2": "ankoppeln",
+    "vnword": "kết nối",
+    "vnans": "kết nối cái gì đó vào cái gì đó",
+    "b1_ex": "Kannst du den Drucker an den Laptop anschließen?",
+    "vn_b1": "Bạn có thể kết nối máy in với máy tính xách tay không?",
+    "b2_ex": "Das neue Wohngebiet wurde gestern an das städtische Stromnetz angeschlossen.",
+    "vn_b2": "Khu dân cư mới đã được kết nối với mạng lưới điện thành phố vào hôm qua.",
+    "lek": 1
+  },
+  {
+    "word": "anschnallen",
+    "ans": "sich (Akk) anschnallen",
+    "type": "Verb",
+    "forms": "schnallt an, schnallte an, hat angeschnallt",
+    "ant_b1": "abschnallen",
+    "ant_b2": "",
+    "vnword": "thắt dây an toàn",
+    "vnans": "tự thắt dây an toàn",
+    "b1_ex": "Bitte schnallen Sie sich im Auto immer an.",
+    "vn_b1": "Vui lòng luôn thắt dây an toàn trong xe hơi.",
+    "b2_ex": "Bevor das Flugzeug startete, mussten alle Passagiere sich pflichtgemäß anschnallen.",
+    "vn_b2": "Trước khi máy bay cất cánh, tất cả hành khách phải thắt dây an toàn theo quy định.",
+    "lek": 1
+  },
+  {
+    "word": "ansehen",
+    "ans": "sich (Dat) etwas (Akk) ansehen",
+    "type": "Verb",
+    "forms": "sieht an, sah an, hat angesehen",
+    "ant_b1": "schauen",
+    "ant_b2": "betrachten",
+    "vnword": "xem, ngắm nhìn",
+    "vnans": "tự xem/ngắm cái gì đó",
+    "b1_ex": "Diesen Film möchte ich mir unbedingt ansehen.",
+    "vn_b1": "Tôi nhất định muốn xem bộ phim này.",
+    "b2_ex": "Der Fachmann muss sich den Schaden erst ansehen, bevor er den Preis nennt.",
+    "vn_b2": "Chuyên gia phải xem qua hư hại trước khi đưa ra giá cả.",
+    "lek": 1
+  },
+  {
+    "word": "ansprechen",
+    "ans": "jemanden (Akk) ansprechen",
+    "type": "Verb",
+    "forms": "spricht an, sprach an, hat angesprochen",
+    "ant_b1": "reden",
+    "ant_b2": "kontaktieren",
+    "vnword": "bắt chuyện, đề cập",
+    "vnans": "bắt chuyện với ai đó",
+    "b1_ex": "Entschuldigung, darf ich Sie kurz ansprechen?",
+    "vn_b1": "Xin lỗi, tôi có thể bắt chuyện với bạn một chút không?",
+    "b2_ex": "Der Dozent sprach während der Vorlesung ein sehr kritisches Thema an.",
+    "vn_b2": "Giảng viên đã đề cập đến một chủ đề rất gay gắt trong bài giảng.",
+    "lek": 1
+  },
+  {
+    "word": "der Anspruch, ¨-e",
+    "ans": "Anspruch auf etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: des Anspruchs, Pl: die Ansprüche",
+    "ant_b1": "",
+    "ant_b2": "die Forderung",
+    "vnword": "yêu cầu, quyền hạn",
+    "vnans": "có quyền đối với cái gì đó",
+    "b1_ex": "Habe ich Anspruch auf mehr Urlaub?",
+    "vn_b1": "Tôi có quyền được nghỉ phép thêm không?",
+    "b2_ex": "Das Projekt stellt hohe Ansprüche an die Konzentration der Mitarbeiter.",
+    "vn_b2": "Dự án đặt ra yêu cầu cao về sự tập trung của nhân viên.",
+    "lek": 1
+  },
+  {
+    "word": "anstellen",
+    "ans": "jemanden (Akk) anstellen",
+    "type": "Verb",
+    "forms": "stellt an, stellte an, hat angestellt",
+    "ant_b1": "arbeiten",
+    "ant_b2": "beschäftigen",
+    "vnword": "thuê mướn, bật (thiết bị)",
+    "vnans": "thuê mướn ai đó",
+    "b1_ex": "Die Firma will dieses Jahr zwei neue Mitarbeiter anstellen.",
+    "vn_b1": "Công ty muốn thuê hai nhân viên mới trong năm nay.",
+    "b2_ex": "Nachdem das Radio angestellt wurde, hörten wir die neuesten Nachrichten.",
+    "vn_b2": "Sau khi radio được bật lên, chúng tôi đã nghe những tin tức mới nhất.",
+    "lek": 1
+  },
+  {
+    "word": "der/die Angestellte, n",
+    "ans": "als Angestellte arbeiten",
+    "type": "Nomen",
+    "forms": "Pl: die Angestellten",
+    "ant_b1": "der Chef",
+    "ant_b2": "der Arbeitnehmer",
+    "vnword": "nhân viên",
+    "vnans": "làm việc như một nhân viên",
+    "b1_ex": "Viele Angestellte arbeiten heute im Homeoffice.",
+    "vn_b1": "Nhiều nhân viên ngày nay làm việc tại nhà.",
+    "b2_ex": "Die Gehälter der Angestellten im öffentlichen Dienst werden dieses Jahr erhöht.",
+    "vn_b2": "Lương của các nhân viên trong khu vực công sẽ được tăng trong năm nay.",
+    "lek": 1
+  },
+  {
+    "word": "sich anstrengen",
+    "ans": "sich für etwas (Akk) anstrengen",
+    "type": "Verb",
+    "forms": "strengt sich an, strengte sich an, hat sich angestrengt",
+    "ant_b1": "ausruhen",
+    "ant_b2": "sich bemühen",
+    "vnword": "cố gắng, nỗ lực",
+    "vnans": "nỗ lực cho cái gì đó",
+    "b1_ex": "Du musst dich in der Schule mehr anstrengen.",
+    "vn_b1": "Bạn phải cố gắng nhiều hơn ở trường.",
+    "b2_ex": "Trotz aller Anstrengungen konnte das Team den Rückstand nicht mehr aufholen.",
+    "vn_b2": "Bất chấp mọi nỗ lực, đội đã không thể đuổi kịp khoảng cách tỉ số.",
+    "lek": 1
+  },
+  {
+    "word": "anstrengend",
+    "ans": "etwas (Nom) ist anstrengend",
+    "type": "Adjektiv",
+    "forms": "anstrengender, am anstrengendsten",
+    "ant_b1": "leicht",
+    "ant_b2": "mühelos",
+    "vnword": "vất vả, mệt nhọc",
+    "vnans": "cái gì đó thì vất vả",
+    "b1_ex": "Die Arbeit im Garten ist sehr anstrengend.",
+    "vn_b1": "Công việc trong vườn rất vất vả.",
+    "b2_ex": "Nach einem anstrengenden Arbeitstag freue ich mich auf einen entspannten Abend.",
+    "vn_b2": "Sau một ngày làm việc mệt nhọc, tôi mong chờ một buổi tối thư giãn.",
+    "lek": 1
+  },
+  {
+    "word": "der Antrag, ¨-e",
+    "ans": "einen Antrag auf etwas (Akk) stellen",
+    "type": "Nomen",
+    "forms": "Gen: des Antrags, Pl: die Anträge",
+    "ant_b1": "",
+    "ant_b2": "das Gesuch",
+    "vnword": "đơn từ, yêu cầu",
+    "vnans": "nộp đơn cho cái gì đó",
+    "b1_ex": "Haben Sie den Antrag schon unterschrieben?",
+    "vn_b1": "Bạn đã ký vào đơn chưa?",
+    "b2_ex": "Sie müssen einen schriftlichen Antrag auf Verlängerung des Visums einreichen.",
+    "vn_b2": "Bạn phải nộp một đơn yêu cầu bằng văn bản về việc gia hạn thị thực.",
+    "lek": 1
+  },
+	
+  {
+    "word": "auseinander",
+    "ans": "etwas (Akk) auseinander nehmen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "zusammen",
+    "ant_b2": "beieinander",
+    "vnword": "tách rời, rẽ ra",
+    "vnans": "tháo rời cái gì đó ra",
+    "b1_ex": "Die beiden Freunde gehen nach der Schule auseinander.",
+    "vn_b1": "Hai người bạn chia tay nhau sau giờ học.",
+    "b2_ex": "Ihre Meinungen zu diesem Thema gehen leider weit auseinander.",
+    "vn_b2": "Ý kiến của họ về chủ đề này rất tiếc lại khác biệt xa nhau.",
+    "lek": 1
+  },
+  {
+    "word": "ausfallen",
+    "ans": "wegen etwas (Dat) ausfallen",
+    "type": "Verb",
+    "forms": "fällt aus, fiel aus, ist ausgefallen",
+    "ant_b1": "stattfinden",
+    "ant_b2": "",
+    "vnword": "bị hủy, rụng",
+    "vnans": "bị hủy do điều gì đó",
+    "b1_ex": "Der Zug fällt heute leider aus.",
+    "vn_b1": "Chuyến tàu hôm nay rất tiếc bị hủy.",
+    "b2_ex": "Wegen Krankheit muss der geplante Vortrag des Professors leider ausfallen.",
+    "vn_b2": "Vì bệnh, bài giảng dự kiến của giáo sư rất tiếc phải hủy.",
+    "lek": 1
+  },
+  {
+    "word": "die Ausgabe, n",
+    "ans": "eine Ausgabe für etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: der Ausgabe, Pl: die Ausgaben",
+    "ant_b1": "die Einnahme",
+    "ant_b2": "der Ertrag",
+    "vnword": "chi phí, ấn bản",
+    "vnans": "có một khoản chi cho cái gì đó",
+    "b1_ex": "Meine Ausgaben für Lebensmittel sind gestiegen.",
+    "vn_b1": "Chi phí cho thực phẩm của tôi đã tăng.",
+    "b2_ex": "Die monatlichen Ausgaben der Familie übersteigen das verfügbare Einkommen deutlich.",
+    "vn_b2": "Chi phí hàng tháng của gia đình vượt quá thu nhập có sẵn một cách rõ rệt.",
+    "lek": 1
+  },
+  {
+    "word": "ausgeben",
+    "ans": "Geld für etwas (Akk) ausgeben",
+    "type": "Verb",
+    "forms": "gibt aus, gab aus, hat ausgegeben",
+    "ant_b1": "sparen",
+    "ant_b2": "einnehmen",
+    "vnword": "tiêu (tiền), chi ra",
+    "vnans": "tiêu tiền cho việc gì đó",
+    "b1_ex": "Ich möchte nicht zu viel Geld für Kleidung ausgeben.",
+    "vn_b1": "Tôi không muốn tiêu quá nhiều tiền cho quần áo.",
+    "b2_ex": "Er hat sein gesamtes Erspartes für ein neues Auto ausgegeben.",
+    "vn_b2": "Anh ấy đã tiêu toàn bộ tiền tiết kiệm của mình cho một chiếc ô tô mới.",
+    "lek": 1
+  },
+  {
+    "word": "ausgehen",
+    "ans": "am Abend ausgehen",
+    "type": "Verb",
+    "forms": "geht aus, ging aus, ist ausgegangen",
+    "ant_b1": "bleiben",
+    "ant_b2": "",
+    "vnword": "đi ra ngoài (chơi), cạn kiệt",
+    "vnans": "đi chơi vào buổi tối",
+    "b1_ex": "Wir gehen am Samstagabend zusammen aus.",
+    "vn_b1": "Chúng tôi đi chơi cùng nhau vào tối thứ Bảy.",
+    "b2_ex": "Uns ist leider während der langen Fahrt das Benzin ausgegangen.",
+    "vn_b2": "Rất tiếc chúng tôi đã hết xăng trong suốt chuyến đi dài.",
+    "lek": 1
+  },
+  {
+    "word": "ausgezeichnet",
+    "ans": "für etwas (Akk) ausgezeichnet sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "schlecht",
+    "ant_b2": "mangelhaft",
+    "vnword": "xuất sắc, tuyệt vời",
+    "vnans": "xuất sắc về cái gì đó",
+    "b1_ex": "Das Essen in diesem Restaurant ist ausgezeichnet.",
+    "vn_b1": "Thức ăn ở nhà hàng này thật xuất sắc.",
+    "b2_ex": "Er verfügt über ausgezeichnete Kenntnisse in der deutschen Grammatik.",
+    "vn_b2": "Anh ấy sở hữu kiến thức tuyệt vời về ngữ pháp tiếng Đức.",
+    "lek": 1
+  },
+  {
+    "word": "die Aushilfe, n",
+    "ans": "als Aushilfe arbeiten",
+    "type": "Nomen",
+    "forms": "Gen: der Aushilfe, Pl: die Aushilfen",
+    "ant_b1": "der Chef",
+    "ant_b2": "die Stammkraft",
+    "vnword": "người giúp việc tạm thời",
+    "vnans": "làm việc như một nhân viên tạm thời",
+    "b1_ex": "Der Supermarkt sucht eine Aushilfe für das Wochenende.",
+    "vn_b1": "Siêu thị đang tìm một người làm tạm thời cho cuối tuần.",
+    "b2_ex": "In der Vorweihnachtszeit arbeiten viele Studenten als Aushilfen im Einzelhandel.",
+    "vn_b2": "Trong thời gian trước Giáng sinh, nhiều sinh viên làm nhân viên tạm thời ở ngành bán lẻ.",
+    "lek": 1
+  },
+  {
+    "word": "die Auskunft, ¨e",
+    "ans": "jemandem (Dat) Auskunft über etwas (Akk) geben",
+    "type": "Nomen",
+    "forms": "Gen: der Auskunft, Pl: die Auskünfte",
+    "ant_b1": "die Frage",
+    "ant_b2": "",
+    "vnword": "thông tin, quầy giải đáp",
+    "vnans": "cung cấp thông tin cho ai đó về cái gì đó",
+    "b1_ex": "Können Sie mir bitte eine Auskunft geben?",
+    "vn_b1": "Bạn có thể vui lòng cho tôi một thông tin được không?",
+    "b2_ex": "Das Personal am Schalter konnte leider keine genaue Auskunft erteilen.",
+    "vn_b2": "Nhân viên tại quầy rất tiếc không thể cung cấp thông tin chính xác.",
+    "lek": 1
+  },
+  {
+    "word": "ausmachen",
+    "ans": "etwas (Akk) ausmachen",
+    "type": "Verb",
+    "forms": "macht aus, machte aus, hat ausgemacht",
+    "ant_b1": "anmachen",
+    "ant_b2": "einschalten",
+    "vnword": "tắt, thỏa thuận",
+    "vnans": "tắt cái gì đó",
+    "b1_ex": "Mach bitte das Licht aus, wenn du gehst.",
+    "vn_b1": "Vui lòng tắt đèn khi bạn rời đi.",
+    "b2_ex": "Wir haben ausgemacht, dass wir uns morgen um acht Uhr treffen.",
+    "vn_b2": "Chúng tôi đã thỏa thuận rằng chúng tôi sẽ gặp nhau vào tám giờ ngày mai.",
+    "lek": 1
+  },
+  {
+    "word": "die Ausnahme, n",
+    "ans": "eine Ausnahme für jemanden (Akk) machen",
+    "type": "Nomen",
+    "forms": "Gen: der Ausnahme, Pl: die Ausnahmen",
+    "ant_b1": "die Regel",
+    "ant_b2": "die Norm",
+    "vnword": "ngoại lệ",
+    "vnans": "tạo một ngoại lệ cho ai đó",
+    "b1_ex": "Das ist eine Ausnahme, normalerweise machen wir das nicht.",
+    "vn_b1": "Đó là một ngoại lệ, bình thường chúng tôi không làm vậy.",
+    "b2_ex": "Ausnahmen bestätigen bekanntlich die Regel in fast jedem rechtlichen Kontext.",
+    "vn_b2": "Ngoại lệ củng cố quy tắc ở hầu hết mọi bối cảnh pháp lý như đã biết.",
+    "lek": 1
+  },
+  {
+    "word": "ausreichen",
+    "ans": "für etwas (Akk) ausreichen",
+    "type": "Verb",
+    "forms": "reicht aus, reichte aus, hat ausgereicht",
+    "ant_b1": "fehlen",
+    "ant_b2": "mangeln",
+    "vnword": "đủ",
+    "vnans": "đủ cho điều gì đó",
+    "b1_ex": "Das Essen reicht für alle Gäste aus.",
+    "vn_b1": "Thức ăn đủ cho tất cả khách.",
+    "b2_ex": "Sein aktuelles Gehalt reicht nicht für den Lebensunterhalt der Familie aus.",
+    "vn_b2": "Tiền lương hiện tại của anh ấy không đủ cho mức sống của gia đình.",
+    "lek": 1
+  },
+  {
+    "word": "ausreichend",
+    "ans": "ausreichend Zeit für etwas (Akk) haben",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "wenig",
+    "ant_b2": "ungenügend",
+    "vnword": "đủ",
+    "vnans": "có đủ thời gian cho việc gì đó",
+    "b1_ex": "Wir haben noch ausreichend Zeit für den Test.",
+    "vn_b1": "Chúng ta vẫn còn đủ thời gian cho bài kiểm tra.",
+    "b2_ex": "Um das Projekt abzuschließen, benötigen wir ausreichend finanzielle Mittel.",
+    "vn_b2": "Để hoàn thành dự án, chúng tôi cần đủ nguồn lực tài chính.",
+    "lek": 1
+  },
+  {
+    "word": "ausrichten",
+    "ans": "jemandem (Dat) etwas (Akk) ausrichten",
+    "type": "Verb",
+    "forms": "richtet aus, richtete aus, hat ausgerichtet",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "chuyển lời",
+    "vnans": "chuyển lời cho ai đó điều gì",
+    "b1_ex": "Soll ich ihm etwas von dir ausrichten?",
+    "vn_b1": "Tôi có nên chuyển lời gì từ bạn cho anh ấy không?",
+    "b2_ex": "Richten Sie ihm bitte aus, dass die Besprechung verschoben wurde.",
+    "vn_b2": "Xin hãy báo với anh ấy rằng cuộc họp đã bị hoãn lại.",
+    "lek": 1
+  },
+  {
+    "word": "sich ausruhen",
+    "ans": "sich von etwas (Dat) ausruhen",
+    "type": "Verb",
+    "forms": "ruht sich aus, ruhte sich aus, hat sich ausgeruht",
+    "ant_b1": "arbeiten",
+    "ant_b2": "sich anstrengen",
+    "vnword": "nghỉ ngơi",
+    "vnans": "nghỉ ngơi sau việc gì đó",
+    "b1_ex": "Ich muss mich von der Arbeit ausruhen.",
+    "vn_b1": "Tôi phải nghỉ ngơi sau công việc.",
+    "b2_ex": "Nach der anstrengenden Operation muss der Patient sich ausreichend ausruhen.",
+    "vn_b2": "Sau ca phẫu thuật vất vả, bệnh nhân nhất định phải nghỉ ngơi đầy đủ.",
+    "lek": 1
+  },
+  {
+    "word": "ausschließen",
+    "ans": "jemanden (Akk) von etwas (Dat) ausschließen",
+    "type": "Verb",
+    "forms": "schließt aus, schloss aus, hat ausgeschlossen",
+    "ant_b1": "einschließen",
+    "ant_b2": "integrieren",
+    "vnword": "loại trừ, khóa ngoài",
+    "vnans": "loại ai đó ra khỏi điều gì đó",
+    "b1_ex": "Wir dürfen niemanden aus der Gruppe ausschließen.",
+    "vn_b1": "Chúng ta không được phép loại bất kỳ ai khỏi nhóm.",
+    "b2_ex": "Man kann völlig ausschließen, dass er etwas mit dem Betrug zu tun hat.",
+    "vn_b2": "Người ta có thể loại trừ hoàn toàn việc anh ta có dính líu đến vụ lừa đảo này.",
+    "lek": 1
+  },
+  {
+    "word": "ausschließlich",
+    "ans": "sich ausschließlich mit etwas (Dat) beschäftigen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "auch",
+    "ant_b2": "inklusive",
+    "vnword": "duy nhất, độc quyền",
+    "vnans": "chỉ bận tâm duy nhất đến điều gì đó",
+    "b1_ex": "Dieses Angebot gilt ausschließlich für Studenten.",
+    "vn_b1": "Ưu đãi này chỉ dành riêng cho sinh viên.",
+    "b2_ex": "Der Geschäftsführer widmet sich ausschließlich der Umstrukturierung des Unternehmens.",
+    "vn_b2": "Giám đốc điều hành hiện tại chỉ dành toàn bộ thời gian cho việc tái cấu trúc công ty.",
+    "lek": 1
+  },
+  {
+    "word": "aussehen",
+    "ans": "gut oder schlecht aussehen",
+    "type": "Verb",
+    "forms": "sieht aus, sah aus, hat ausgesehen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "trông có vẻ, ngoại hình",
+    "vnans": "trông đẹp hoặc xấu",
+    "b1_ex": "Du siehst heute sehr müde aus.",
+    "vn_b1": "Hôm nay trông bạn rất mệt mỏi.",
+    "b2_ex": "Es sieht ganz danach aus, als ob wir das Projekt verschieben müssten.",
+    "vn_b2": "Có vẻ như chúng ta sẽ phải hoãn dự án lại.",
+    "lek": 1
+  },
+  {
+    "word": "außerhalb",
+    "ans": "sich außerhalb der Stadt (Gen) befinden",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "innerhalb",
+    "ant_b2": "",
+    "vnword": "bên ngoài",
+    "vnans": "ở bên ngoài thành phố",
+    "b1_ex": "Wir wohnen etwas außerhalb der Stadt.",
+    "vn_b1": "Chúng tôi sống ở khu vực ngoài thành phố một chút.",
+    "b2_ex": "Außerhalb der regulären Öffnungszeiten ist das Gebäude nur mit Karte zugänglich.",
+    "vn_b2": "Ngoài giờ mở cửa thông thường, tòa nhà chỉ có thể ra vào bằng thẻ.",
+    "lek": 1
+  },
+  {
+    "word": "äußerlich",
+    "ans": "jemanden (Akk) äußerlich beurteilen",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "innerlich",
+    "ant_b2": "",
+    "vnword": "bề ngoài, hình thức",
+    "vnans": "đánh giá ai đó qua vẻ bề ngoài",
+    "b1_ex": "Äußerlich ist das Haus sehr schön.",
+    "vn_b1": "Bề ngoài ngôi nhà rất đẹp.",
+    "b2_ex": "Äußerlich wirkte er völlig ruhig, aber innerlich war er angespannt.",
+    "vn_b2": "Bề ngoài anh ấy có vẻ hoàn toàn bình tĩnh, nhưng bên trong lại rất căng thẳng.",
+    "lek": 1
+  },
+  {
+    "word": "außer",
+    "ans": "alle außer jemandem (Dat) kommen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "inklusive",
+    "ant_b2": "",
+    "vnword": "ngoại trừ",
+    "vnans": "tất cả ngoại trừ ai đó đến",
+    "b1_ex": "Alle waren pünktlich, außer mir.",
+    "vn_b1": "Tất cả mọi người đều đúng giờ, ngoại trừ tôi.",
+    "b2_ex": "Außer einem leichten Kratzer hat das Auto keinen weiteren Schaden erlitten.",
+    "vn_b2": "Ngoại trừ một vết xước nhẹ, chiếc xe không bị thiệt hại nào khác.",
+    "lek": 1
+  },
+  {
+    "word": "außerdem",
+    "ans": "etwas (Akk) außerdem machen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "",
+    "ant_b2": "überdies",
+    "vnword": "ngoài ra",
+    "vnans": "ngoài ra còn làm gì đó",
+    "b1_ex": "Es ist kalt und außerdem regnet es.",
+    "vn_b1": "Trời lạnh và ngoài ra còn mưa nữa.",
+    "b2_ex": "Die Miete ist sehr hoch, außerdem liegt die Wohnung an einer lauten Straße.",
+    "vn_b2": "Giá thuê rất cao, ngoài ra căn hộ còn nằm trên một con đường ồn ào.",
+    "lek": 1
+  },
+  {
+    "word": "die Aussicht, en",
+    "ans": "eine gute Aussicht auf etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: der Aussicht, Pl: die Aussichten",
+    "ant_b1": "",
+    "ant_b2": "die Perspektivlosigkeit",
+    "vnword": "quang cảnh, triển vọng",
+    "vnans": "có triển vọng tốt về điều gì đó",
+    "b1_ex": "Vom Balkon hat man eine schöne Aussicht.",
+    "vn_b1": "Từ ban công, người ta có một quang cảnh đẹp.",
+    "b2_ex": "Die wirtschaftlichen Aussichten für das nächste Jahr haben sich deutlich verbessert.",
+    "vn_b2": "Triển vọng kinh tế cho năm tới đã được cải thiện rõ rệt.",
+    "lek": 1
+  },
+  {
+    "word": "aussprechen",
+    "ans": "etwas (Akk) deutlich aussprechen",
+    "type": "Verb",
+    "forms": "spricht aus, sprach aus, hat ausgesprochen",
+    "ant_b1": "verschweigen",
+    "ant_b2": "zurückhalten",
+    "vnword": "phát âm, nói ra",
+    "vnans": "nói ra/phát âm điều gì đó rõ ràng",
+    "b1_ex": "Wie spricht man dieses Wort aus?",
+    "vn_b1": "Người ta phát âm từ này như thế nào?",
+    "b2_ex": "Er hat seine Bedenken bezüglich des Projekts im Meeting offen ausgesprochen.",
+    "vn_b2": "Anh ấy đã cởi mở nói ra những lo ngại của mình về dự án trong cuộc họp.",
+    "lek": 1
+  },
+  {
+    "word": "ausstellen",
+    "ans": "etwas (Akk) in einem Museum ausstellen",
+    "type": "Verb",
+    "forms": "stellt aus, stellte aus, hat ausgestellt",
+    "ant_b1": "verbergen",
+    "ant_b2": "einziehen",
+    "vnword": "trưng bày, cấp (giấy tờ)",
+    "vnans": "trưng bày cái gì đó trong một bảo tàng",
+    "b1_ex": "Der Arzt muss mir ein Rezept ausstellen.",
+    "vn_b1": "Bác sĩ phải cấp cho tôi một toa thuốc.",
+    "b2_ex": "Die Galerie wird moderne Kunstwerke von lokalen Künstlern ausstellen.",
+    "vn_b2": "Phòng tranh sẽ trưng bày các tác phẩm nghệ thuật hiện đại của các nghệ sĩ địa phương.",
+    "lek": 1
+  },
+  {
+    "word": "anwenden",
+    "ans": "etwas (Akk) auf etwas (Akk) anwenden",
+    "type": "Verb",
+    "forms": "wendet an, wandte/wendete an, hat angewandt/angewendet",
+    "ant_b1": "benutzen",
+    "ant_b2": "implementieren",
+    "vnword": "áp dụng, ứng dụng",
+    "vnans": "áp dụng cái gì vào cái gì",
+    "b1_ex": "Man kann diese Regel nicht immer anwenden.",
+    "vn_b1": "Người ta không thể luôn luôn áp dụng quy tắc này.",
+    "b2_ex": "Theoretisches Wissen sollte man in der Praxis konsequent anwenden.",
+    "vn_b2": "Kiến thức lý thuyết nên được áp dụng một cách nhất quán trong thực tế.",
+    "lek": 1
+  },
+  {
+    "word": "anwesend",
+    "ans": "bei etwas (Dat) anwesend sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "abwesend",
+    "ant_b2": "präsent",
+    "vnword": "có mặt",
+    "vnans": "có mặt tại sự kiện gì đó",
+    "b1_ex": "Alle Schüler sind heute im Unterricht anwesend.",
+    "vn_b1": "Tất cả học sinh đều có mặt trong buổi học hôm nay.",
+    "b2_ex": "Trotz der Ferien waren fast alle Mitglieder bei der Versammlung anwesend.",
+    "vn_b2": "Bất chấp kỳ nghỉ, gần như tất cả thành viên đều có mặt tại cuộc họp.",
+    "lek": 1
+  },
+  {
+    "word": "antworten",
+    "ans": "auf etwas (Akk) antworten",
+    "type": "Verb",
+    "forms": "antwortet, antwortete, hat geantwortet",
+    "ant_b1": "fragen",
+    "ant_b2": "erwidern",
+    "vnword": "trả lời",
+    "vnans": "trả lời cho cái gì đó",
+    "b1_ex": "Bitte antworten Sie schnell auf meine E-Mail.",
+    "vn_b1": "Vui lòng trả lời email của tôi nhanh chóng.",
+    "b2_ex": "Er konnte auf die komplizierte Frage des Journalisten nicht sofort antworten.",
+    "vn_b2": "Anh ấy không thể trả lời ngay lập tức câu hỏi phức tạp của nhà báo.",
+    "lek": 1
+  },
+  {
+    "word": "der Anwalt, ¨e / die Anwältin, nen",
+    "ans": "jemanden als Anwalt beauftragen",
+    "type": "Nomen",
+    "forms": "Gen: des Anwalts, Pl: die Anwälte",
+    "ant_b1": "",
+    "ant_b2": "der Rechtsbeistand",
+    "vnword": "luật sư",
+    "vnans": "thuê ai đó làm luật sư",
+    "b1_ex": "Mein Anwalt hilft mir bei dem Problem.",
+    "vn_b1": "Luật sư của tôi giúp tôi giải quyết vấn đề đó.",
+    "b2_ex": "Die Anwältin riet ihrem Mandanten, vor Gericht keine Aussage zu machen.",
+    "vn_b2": "Nữ luật sư đã khuyên thân chủ của mình không đưa ra lời khai trước tòa.",
+    "lek": 1
+  },
+  {
+    "word": "anzeigen",
+    "ans": "jemanden (Akk) bei der Polizei anzeigen",
+    "type": "Verb",
+    "forms": "zeigt an, zeigte an, hat angezeigt",
+    "ant_b1": "sagen",
+    "ant_b2": "melden",
+    "vnword": "tố cáo, trình báo",
+    "vnans": "tố cáo ai đó với cảnh sát",
+    "b1_ex": "Ich muss den Diebstahl sofort anzeigen.",
+    "vn_b1": "Tôi phải trình báo vụ trộm ngay lập tức.",
+    "b2_ex": "Nach dem Unfall zeigte er den Fahrer wegen Fahrerflucht an.",
+    "vn_b2": "Sau tai nạn, anh ấy đã tố cáo tài xế vì tội gây tai nạn rồi bỏ chạy.",
+    "lek": 1
+  },
+  {
+    "word": "die Anzeige, n",
+    "ans": "eine Anzeige in der Zeitung aufgeben",
+    "type": "Nomen",
+    "forms": "Gen: der Anzeige, Pl: die Anzeigen",
+    "ant_b1": "",
+    "ant_b2": "das Inserat",
+    "vnword": "mẩu quảng cáo, đơn tố cáo",
+    "vnans": "đăng một mẩu quảng cáo trên báo",
+    "b1_ex": "Hast du die Anzeige für den Job gelesen?",
+    "vn_b1": "Bạn đã đọc mẩu quảng cáo cho công việc chưa?",
+    "b2_ex": "Er erstattete Anzeige gegen Unbekannt wegen Sachbeschädigung.",
+    "vn_b2": "Anh ấy đã nộp đơn tố cáo đối tượng không xác định vì tội phá hoại tài sản.",
+    "lek": 1
+  },
+  {
+    "word": "sich anziehen",
+    "ans": "sich (Akk) für das Fest anziehen",
+    "type": "Verb",
+    "forms": "zieht an, zog an, hat angezogen",
+    "ant_b1": "sich ausziehen",
+    "ant_b2": "sich kleiden",
+    "vnword": "mặc quần áo",
+    "vnans": "mặc đồ cho lễ hội",
+    "b1_ex": "Zieh dich bitte warm an, es ist kalt.",
+    "vn_b1": "Hãy mặc ấm vào, trời lạnh đấy.",
+    "b2_ex": "Sie zog sich für das Vorstellungsgespräch besonders schick an.",
+    "vn_b2": "Cô ấy đã mặc đồ đặc biệt sang trọng cho buổi phỏng vấn xin việc.",
+    "lek": 1
+  },
+  {
+    "word": "der Appetit",
+    "ans": "Appetit auf etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: des Appetit(e)s, (Sg.)",
+    "ant_b1": "der Hunger",
+    "ant_b2": "",
+    "vnword": "sự ngon miệng, ham muốn ăn",
+    "vnans": "thèm ăn cái gì đó",
+    "b1_ex": "Guten Appetit beim Essen!",
+    "vn_b1": "Chúc ăn ngon miệng!",
+    "b2_ex": "Ich habe heute überhaupt keinen Appetit auf Fleisch.",
+    "vn_b2": "Hôm nay tôi hoàn toàn không thèm ăn thịt chút nào.",
+    "lek": 1
+  },
+  {
+    "word": "arbeiten",
+    "ans": "als jemand (Nom) bei jemandem (Dat) arbeiten",
+    "type": "Verb",
+    "forms": "arbeitet, arbeitete, hat gearbeitet",
+    "ant_b1": "spielen",
+    "ant_b2": "tätig sein",
+    "vnword": "làm việc",
+    "vnans": "làm việc với tư cách là... tại...",
+    "b1_ex": "Ich arbeite als Lehrer bei einer Sprachschule.",
+    "vn_b1": "Tôi làm giáo viên tại một trường ngoại ngữ.",
+    "b2_ex": "Sie arbeitet als Projektleiterin bei einem international agierenden Konzern.",
+    "vn_b2": "Cô ấy làm quản lý dự án tại một tập đoàn hoạt động quốc tế.",
+    "lek": 1
+  },
+  {
+    "word": "die Arbeitserlaubnis",
+    "ans": "eine Arbeitserlaubnis für ein Land beantragen",
+    "type": "Nomen",
+    "forms": "Gen: der Arbeitserlaubnis, Pl: die Arbeitserlaubnisse",
+    "ant_b1": "",
+    "ant_b2": "die Arbeitsgenehmigung",
+    "vnword": "giấy phép lao động",
+    "vnans": "xin giấy phép lao động cho một quốc gia",
+    "b1_ex": "Ohne Arbeitserlaubnis darf man hier nicht arbeiten.",
+    "vn_b1": "Không có giấy phép lao động thì không được làm việc ở đây.",
+    "b2_ex": "Die Erteilung der Arbeitserlaubnis kann mehrere Monate in Anspruch nehmen.",
+    "vn_b2": "Việc cấp giấy phép lao động có thể mất vài tháng.",
+    "lek": 1
+  },
+  {
+    "word": "die Arbeitslosigkeit",
+    "ans": "die Arbeitslosigkeit im Land bekämpfen",
+    "type": "Nomen",
+    "forms": "Gen: der Arbeitslosigkeit, (Sg.)",
+    "ant_b1": "die Arbeit",
+    "ant_b2": "die Erwerbslosigkeit",
+    "vnword": "tình trạng thất nghiệp",
+    "vnans": "chống lại tình trạng thất nghiệp trong nước",
+    "b1_ex": "Die Arbeitslosigkeit ist in diesem Jahr gesunken.",
+    "vn_b1": "Tình trạng thất nghiệp đã giảm trong năm nay.",
+    "b2_ex": "Langfristige Arbeitslosigkeit führt oft zu sozialen und psychischen Problemen.",
+    "vn_b2": "Thất nghiệp kéo dài thường dẫn đến các vấn đề xã hội và tâm lý.",
+    "lek": 1
+  },
+  {
+    "word": "aufpassen",
+    "ans": "auf jemanden / etwas (Akk) aufpassen",
+    "type": "Verb",
+    "forms": "passt auf, passte auf, hat aufgepasst",
+    "ant_b1": "hören",
+    "ant_b2": "beaufsichtigen",
+    "vnword": "chú ý, trông nom",
+    "vnans": "chú ý/trông nom ai hoặc cái gì",
+    "b1_ex": "Kannst du kurz auf meine Tasche aufpassen?",
+    "vn_b1": "Bạn có thể trông giúp cái túi của tôi một lát không?",
+    "b2_ex": "Im Straßenverkehr muss man ständig auf die anderen Verkehrsteilnehmer aufpassen.",
+    "vn_b2": "Trong giao thông, người ta phải liên tục chú ý đến những người tham gia giao thông khác.",
+    "lek": 1
+  },
+  {
+    "word": "sich aufregen",
+    "ans": "sich über etwas (Akk) aufregen",
+    "type": "Verb",
+    "forms": "regt sich auf, regte sich auf, hat sich aufgeregt",
+    "ant_b1": "sich beruhigen",
+    "ant_b2": "sich empören",
+    "vnword": "nổi nóng, lo lắng",
+    "vnans": "nổi nóng về điều gì đó",
+    "b1_ex": "Reg dich nicht über das Wetter auf!",
+    "vn_b1": "Đừng nổi nóng vì thời tiết nữa!",
+    "b2_ex": "Es lohnt sich nicht, sich über solche Kleinigkeiten ständig aufzuregen.",
+    "vn_b2": "Không đáng để liên tục nổi nóng về những chuyện vặt vãnh như vậy.",
+    "lek": 1
+  },
+  {
+    "word": "aufgeregt",
+    "ans": "vor der Prüfung aufgeregt sein",
+    "type": "Adjektiv",
+    "forms": "aufgeregter, am aufgeregtesten",
+    "ant_b1": "ruhig",
+    "ant_b2": "gelassen",
+    "vnword": "hồi hộp, lo lắng",
+    "vnans": "hồi hộp trước kỳ thi",
+    "b1_ex": "Ich bin vor der Reise sehr aufgeregt.",
+    "vn_b1": "Tôi rất hồi hộp trước chuyến đi.",
+    "b2_ex": "Die Kinder waren wegen des bevorstehenden Schulausflugs sichtlich aufgeregt.",
+    "vn_b2": "Lũ trẻ rõ ràng là rất hồi hộp vì chuyến dã ngoại sắp tới của trường.",
+    "lek": 1
+  },
+  {
+    "word": "aufregend",
+    "ans": "etwas (Nom) aufregend finden",
+    "type": "Adjektiv",
+    "forms": "aufregender, am aufregendsten",
+    "ant_b1": "langweilig",
+    "ant_b2": "spannend",
+    "vnword": "thú vị, kịch tính",
+    "vnans": "cảm thấy cái gì đó thú vị/kịch tính",
+    "b1_ex": "Der Film war wirklich aufregend.",
+    "vn_b1": "Bộ phim thực sự rất thú vị.",
+    "b2_ex": "Ein Auslandsjahr ist eine aufregende Erfahrung für junge Menschen.",
+    "vn_b2": "Một năm ở nước ngoài là một trải nghiệm thú vị đối với giới trẻ.",
+    "lek": 1
+  },
+  {
+    "word": "aufstehen",
+    "ans": "morgens früh aufstehen",
+    "type": "Verb",
+    "forms": "steht auf, stand auf, ist aufgestanden",
+    "ant_b1": "schlafen",
+    "ant_b2": "",
+    "vnword": "thức dậy, đứng dậy",
+    "vnans": "thức dậy sớm vào buổi sáng",
+    "b1_ex": "Ich muss morgen um sechs Uhr aufstehen.",
+    "vn_b1": "Tôi phải thức dậy lúc 6 giờ sáng mai.",
+    "b2_ex": "Sobald der Richter den Raum betrat, mussten alle Anwesenden aufstehen.",
+    "vn_b2": "Ngay khi thẩm phán bước vào phòng, tất cả những người có mặt phải đứng dậy.",
+    "lek": 1
+  },
+  {
+    "word": "der Auftrag, ¨e",
+    "ans": "jemandem einen Auftrag geben",
+    "type": "Nomen",
+    "forms": "Gen: des Auftrag(e)s, Pl: die Aufträge",
+    "ant_b1": "",
+    "ant_b2": "die Bestellung",
+    "vnword": "đơn đặt hàng, nhiệm vụ",
+    "vnans": "giao nhiệm vụ/đơn hàng cho ai",
+    "b1_ex": "Die Firma hat einen großen Auftrag bekommen.",
+    "vn_b1": "Công ty đã nhận được một đơn đặt hàng lớn.",
+    "b2_ex": "Der Handwerker erledigte den Auftrag zur vollen Zufriedenheit des Kunden.",
+    "vn_b2": "Người thợ đã hoàn thành nhiệm vụ trước sự hài lòng tuyệt đối của khách hàng.",
+    "lek": 1
+  },
+  {
+    "word": "auftreten",
+    "ans": "auf einer Bühne auftreten",
+    "type": "Verb",
+    "forms": "tritt auf, trat auf, ist aufgetreten",
+    "ant_b1": "",
+    "ant_b2": "erscheinen",
+    "vnword": "biểu diễn, xuất hiện",
+    "vnans": "biểu diễn trên sân khấu",
+    "b1_ex": "Die Band tritt heute Abend im Club auf.",
+    "vn_b1": "Ban nhạc sẽ biểu diễn tại câu lạc bộ tối nay.",
+    "b2_ex": "Unerwartete Probleme können bei der Umsetzung des Plans jederzeit auftreten.",
+    "vn_b2": "Những vấn đề bất ngờ có thể xuất hiện bất cứ lúc nào trong quá trình thực hiện kế hoạch.",
+    "lek": 1
+  },
+  {
+    "word": "der Auftritt, e",
+    "ans": "einen Auftritt vor Publikum haben",
+    "type": "Nomen",
+    "forms": "Gen: des Auftritt(e)s, Pl: die Auftritte",
+    "ant_b1": "",
+    "ant_b2": "die Performance",
+    "vnword": "buổi biểu diễn",
+    "vnans": "có một buổi biểu diễn trước khán giả",
+    "b1_ex": "Der Auftritt der Sängerin war fantastisch.",
+    "vn_b1": "Buổi biểu diễn của nữ ca sĩ thật tuyệt vời.",
+    "b2_ex": "Nach seinem souveränen Auftritt erhielt der Redner langanhaltenden Applaus.",
+    "vn_b2": "Sau màn trình diễn tự tin, diễn giả đã nhận được tràng pháo tay kéo dài.",
+    "lek": 1
+  },
+  {
+    "word": "aufwärts",
+    "ans": "mit etwas (Dat) aufwärts gehen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "abwärts",
+    "ant_b2": "",
+    "vnword": "đi lên, hướng lên",
+    "vnans": "cái gì đó đang tiến triển đi lên",
+    "b1_ex": "Die Straße führt steil aufwärts.",
+    "vn_b1": "Con đường dẫn dốc đi lên.",
+    "b2_ex": "Nach der langen Wirtschaftskrise geht es mit den Verkaufszahlen endlich aufwärts.",
+    "vn_b2": "Sau cuộc khủng hoảng kinh tế dài, doanh số bán hàng cuối cùng cũng đang đi lên.",
+    "lek": 1
+  },
+  {
+    "word": "der Augenblick, e",
+    "ans": "einen Augenblick warten",
+    "type": "Nomen",
+    "forms": "Gen: des Augenblick(e)s, Pl: die Augenblicke",
+    "ant_b1": "die Zeit",
+    "ant_b2": "der Moment",
+    "vnword": "khoảnh khắc, chốc lát",
+    "vnans": "đợi một lát",
+    "b1_ex": "Warten Sie bitte einen Augenblick.",
+    "vn_b1": "Vui lòng đợi một lát.",
+    "b2_ex": "In diesem entscheidenden Augenblick wusste er genau, was zu tun war.",
+    "vn_b2": "Trong khoảnh khắc quyết định này, anh ấy đã biết chính xác phải làm gì.",
+    "lek": 1
+  },
+  {
+    "word": "die Ausbildung, en",
+    "ans": "eine Ausbildung zum Mechaniker machen",
+    "type": "Nomen",
+    "forms": "Gen: der Ausbildung, Pl: die Ausbildungen",
+    "ant_b1": "die Schule",
+    "ant_b2": "die Lehre",
+    "vnword": "sự đào tạo nghề",
+    "vnans": "theo học khóa đào tạo thợ cơ khí",
+    "b1_ex": "Nach der Schule mache ich eine Ausbildung.",
+    "vn_b1": "Sau khi tốt nghiệp trung học, tôi sẽ học nghề.",
+    "b2_ex": "Eine fundierte Ausbildung ist die Basis für eine erfolgreiche berufliche Karriere.",
+    "vn_b2": "Một sự đào tạo vững chắc là nền tản cho một sự nghiệp thành công.",
+    "lek": 1
+  },
+  {
+    "word": "ausgebildet",
+    "ans": "als Fachkraft ausgebildet sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "",
+    "ant_b2": "qualifiziert",
+    "vnword": "được đào tạo",
+    "vnans": "được đào tạo như một chuyên gia",
+    "b1_ex": "Sie ist eine gut ausgebildete Krankenschwester.",
+    "vn_b1": "Cô ấy là một y tá được đào tạo tốt.",
+    "b2_ex": "Für diese verantwortungsvolle Position suchen wir speziell ausgebildete Fachkräfte.",
+    "vn_b2": "Đối với vị trí đầy trách nhiệm này, chúng tôi tìm kiếm các chuyên gia được đào tạo chuyên biệt.",
+    "lek": 1
+  },
+  {
+    "word": "der Ausdruck, ¨e / e",
+    "ans": "etwas (Akk) zum Ausdruck bringen",
+    "type": "Nomen",
+    "forms": "Gen: des Ausdruck(e)s, Pl: die Ausdrücke (Sprache) / Ausdrucke (Druck)",
+    "ant_b1": "das Wort",
+    "ant_b2": "die Redewendung",
+    "vnword": "từ ngữ, sự diễn đạt, bản in",
+    "vnans": "diễn đạt điều gì đó",
+    "b1_ex": "Diesen Ausdruck habe ich noch nie gehört.",
+    "vn_b1": "Tôi chưa bao giờ nghe cụm từ này.",
+    "b2_ex": "Er brachte seine tiefe Dankbarkeit in einem kurzen Brief zum Ausdruck.",
+    "vn_b2": "Anh ấy đã bày tỏ lòng biết ơn sâu sắc của mình trong một bức thư ngắn.",
+    "lek": 1
+  },
+  {
+    "word": "auseinander",
+    "ans": "etwas (Akk) auseinander nehmen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "zusammen",
+    "ant_b2": "beieinander",
+    "vnword": "tách rời, rẽ ra",
+    "vnans": "tháo rời cái gì đó ra",
+    "b1_ex": "Die beiden Freunde gehen nach der Schule auseinander.",
+    "vn_b1": "Hai người bạn chia tay nhau sau giờ học.",
+    "b2_ex": "Ihre Meinungen zu diesem Thema gehen leider weit auseinander.",
+    "vn_b2": "Ý kiến của họ về chủ đề này rất tiếc lại khác biệt xa nhau.",
+    "lek": 1
+  },
+  {
+    "word": "ausfallen",
+    "ans": "wegen etwas (Dat) ausfallen",
+    "type": "Verb",
+    "forms": "fällt aus, fiel aus, ist ausgefallen",
+    "ant_b1": "stattfinden",
+    "ant_b2": "",
+    "vnword": "bị hủy, rụng",
+    "vnans": "bị hủy do điều gì đó",
+    "b1_ex": "Der Zug fällt heute leider aus.",
+    "vn_b1": "Chuyến tàu hôm nay rất tiếc bị hủy.",
+    "b2_ex": "Wegen Krankheit muss der geplante Vortrag des Professors leider ausfallen.",
+    "vn_b2": "Vì bệnh, bài giảng dự kiến của giáo sư rất tiếc phải hủy.",
+    "lek": 1
+  },
+  {
+    "word": "die Ausgabe, n",
+    "ans": "eine Ausgabe für etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: der Ausgabe, Pl: die Ausgaben",
+    "ant_b1": "die Einnahme",
+    "ant_b2": "der Ertrag",
+    "vnword": "chi phí, ấn bản",
+    "vnans": "có một khoản chi cho cái gì đó",
+    "b1_ex": "Meine Ausgaben für Lebensmittel sind gestiegen.",
+    "vn_b1": "Chi phí cho thực phẩm của tôi đã tăng.",
+    "b2_ex": "Die monatlichen Ausgaben der Familie übersteigen das verfügbare Einkommen deutlich.",
+    "vn_b2": "Chi phí hàng tháng của gia đình vượt quá thu nhập có sẵn một cách rõ rệt.",
+    "lek": 1
+  },
+  {
+    "word": "ausgeben",
+    "ans": "Geld für etwas (Akk) ausgeben",
+    "type": "Verb",
+    "forms": "gibt aus, gab aus, hat ausgegeben",
+    "ant_b1": "sparen",
+    "ant_b2": "einnehmen",
+    "vnword": "tiêu (tiền), chi ra",
+    "vnans": "tiêu tiền cho việc gì đó",
+    "b1_ex": "Ich möchte nicht zu viel Geld für Kleidung ausgeben.",
+    "vn_b1": "Tôi không muốn tiêu quá nhiều tiền cho quần áo.",
+    "b2_ex": "Er hat sein gesamtes Erspartes für ein neues Auto ausgegeben.",
+    "vn_b2": "Anh ấy đã tiêu toàn bộ tiền tiết kiệm của mình cho một chiếc ô tô mới.",
+    "lek": 1
+  },
+  {
+    "word": "ausgehen",
+    "ans": "am Abend ausgehen",
+    "type": "Verb",
+    "forms": "geht aus, ging aus, ist ausgegangen",
+    "ant_b1": "bleiben",
+    "ant_b2": "",
+    "vnword": "đi ra ngoài (chơi), cạn kiệt",
+    "vnans": "đi chơi vào buổi tối",
+    "b1_ex": "Wir gehen am Samstagabend zusammen aus.",
+    "vn_b1": "Chúng tôi đi chơi cùng nhau vào tối thứ Bảy.",
+    "b2_ex": "Uns ist leider während der langen Fahrt das Benzin ausgegangen.",
+    "vn_b2": "Rất tiếc chúng tôi đã hết xăng trong suốt chuyến đi dài.",
+    "lek": 1
+  },
+  {
+    "word": "ausgezeichnet",
+    "ans": "für etwas (Akk) ausgezeichnet sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "schlecht",
+    "ant_b2": "mangelhaft",
+    "vnword": "xuất sắc, tuyệt vời",
+    "vnans": "xuất sắc về cái gì đó",
+    "b1_ex": "Das Essen in diesem Restaurant ist ausgezeichnet.",
+    "vn_b1": "Thức ăn ở nhà hàng này thật xuất sắc.",
+    "b2_ex": "Er verfügt über ausgezeichnete Kenntnisse in der deutschen Grammatik.",
+    "vn_b2": "Anh ấy sở hữu kiến thức tuyệt vời về ngữ pháp tiếng Đức.",
+    "lek": 1
+  },
+  {
+    "word": "die Aushilfe, n",
+    "ans": "als Aushilfe arbeiten",
+    "type": "Nomen",
+    "forms": "Gen: der Aushilfe, Pl: die Aushilfen",
+    "ant_b1": "der Chef",
+    "ant_b2": "die Stammkraft",
+    "vnword": "người giúp việc tạm thời",
+    "vnans": "làm việc như một nhân viên tạm thời",
+    "b1_ex": "Der Supermarkt sucht eine Aushilfe für das Wochenende.",
+    "vn_b1": "Siêu thị đang tìm một người làm tạm thời cho cuối tuần.",
+    "b2_ex": "In der Vorweihnachtszeit arbeiten viele Studenten als Aushilfen im Einzelhandel.",
+    "vn_b2": "Trong thời gian trước Giáng sinh, nhiều sinh viên làm nhân viên tạm thời ở ngành bán lẻ.",
+    "lek": 1
+  },
+  {
+    "word": "die Auskunft, ¨e",
+    "ans": "jemandem (Dat) Auskunft über etwas (Akk) geben",
+    "type": "Nomen",
+    "forms": "Gen: der Auskunft, Pl: die Auskünfte",
+    "ant_b1": "die Frage",
+    "ant_b2": "",
+    "vnword": "thông tin, quầy giải đáp",
+    "vnans": "cung cấp thông tin cho ai đó về cái gì đó",
+    "b1_ex": "Können Sie mir bitte eine Auskunft geben?",
+    "vn_b1": "Bạn có thể vui lòng cho tôi một thông tin được không?",
+    "b2_ex": "Das Personal am Schalter konnte leider keine genaue Auskunft erteilen.",
+    "vn_b2": "Nhân viên tại quầy rất tiếc không thể cung cấp thông tin chính xác.",
+    "lek": 1
+  },
+  {
+    "word": "ausmachen",
+    "ans": "etwas (Akk) ausmachen",
+    "type": "Verb",
+    "forms": "macht aus, machte aus, hat ausgemacht",
+    "ant_b1": "anmachen",
+    "ant_b2": "einschalten",
+    "vnword": "tắt, thỏa thuận",
+    "vnans": "tắt cái gì đó",
+    "b1_ex": "Mach bitte das Licht aus, wenn du gehst.",
+    "vn_b1": "Vui lòng tắt đèn khi bạn rời đi.",
+    "b2_ex": "Wir haben ausgemacht, dass wir uns morgen um acht Uhr treffen.",
+    "vn_b2": "Chúng tôi đã thỏa thuận rằng chúng tôi sẽ gặp nhau vào tám giờ ngày mai.",
+    "lek": 1
+  },
+  {
+    "word": "die Ausnahme, n",
+    "ans": "eine Ausnahme für jemanden (Akk) machen",
+    "type": "Nomen",
+    "forms": "Gen: der Ausnahme, Pl: die Ausnahmen",
+    "ant_b1": "die Regel",
+    "ant_b2": "die Norm",
+    "vnword": "ngoại lệ",
+    "vnans": "tạo một ngoại lệ cho ai đó",
+    "b1_ex": "Das ist eine Ausnahme, normalerweise machen wir das nicht.",
+    "vn_b1": "Đó là một ngoại lệ, bình thường chúng tôi không làm vậy.",
+    "b2_ex": "Ausnahmen bestätigen bekanntlich die Regel in fast jedem rechtlichen Kontext.",
+    "vn_b2": "Ngoại lệ củng cố quy tắc ở hầu hết mọi bối cảnh pháp lý như đã biết.",
+    "lek": 1
+  },
+  {
+    "word": "ausreichen",
+    "ans": "für etwas (Akk) ausreichen",
+    "type": "Verb",
+    "forms": "reicht aus, reichte aus, hat ausgereicht",
+    "ant_b1": "fehlen",
+    "ant_b2": "mangeln",
+    "vnword": "đủ",
+    "vnans": "đủ cho điều gì đó",
+    "b1_ex": "Das Essen reicht für alle Gäste aus.",
+    "vn_b1": "Thức ăn đủ cho tất cả khách.",
+    "b2_ex": "Sein aktuelles Gehalt reicht nicht für den Lebensunterhalt der Familie aus.",
+    "vn_b2": "Tiền lương hiện tại của anh ấy không đủ cho mức sống của gia đình.",
+    "lek": 1
+  },
+  {
+    "word": "ausreichend",
+    "ans": "ausreichend Zeit für etwas (Akk) haben",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "wenig",
+    "ant_b2": "ungenügend",
+    "vnword": "đủ",
+    "vnans": "có đủ thời gian cho việc gì đó",
+    "b1_ex": "Wir haben noch ausreichend Zeit für den Test.",
+    "vn_b1": "Chúng ta vẫn còn đủ thời gian cho bài kiểm tra.",
+    "b2_ex": "Um das Projekt abzuschließen, benötigen wir ausreichend finanzielle Mittel.",
+    "vn_b2": "Để hoàn thành dự án, chúng tôi cần đủ nguồn lực tài chính.",
+    "lek": 1
+  },
+  {
+    "word": "ausrichten",
+    "ans": "jemandem (Dat) etwas (Akk) ausrichten",
+    "type": "Verb",
+    "forms": "richtet aus, richtete aus, hat ausgerichtet",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "chuyển lời",
+    "vnans": "chuyển lời cho ai đó điều gì",
+    "b1_ex": "Soll ich ihm etwas von dir ausrichten?",
+    "vn_b1": "Tôi có nên chuyển lời gì từ bạn cho anh ấy không?",
+    "b2_ex": "Richten Sie ihm bitte aus, dass die Besprechung verschoben wurde.",
+    "vn_b2": "Xin hãy báo với anh ấy rằng cuộc họp đã bị hoãn lại.",
+    "lek": 1
+  },
+  {
+    "word": "sich ausruhen",
+    "ans": "sich von etwas (Dat) ausruhen",
+    "type": "Verb",
+    "forms": "ruht sich aus, ruhte sich aus, hat sich ausgeruht",
+    "ant_b1": "arbeiten",
+    "ant_b2": "sich anstrengen",
+    "vnword": "nghỉ ngơi",
+    "vnans": "nghỉ ngơi sau việc gì đó",
+    "b1_ex": "Ich muss mich von der Arbeit ausruhen.",
+    "vn_b1": "Tôi phải nghỉ ngơi sau công việc.",
+    "b2_ex": "Nach der anstrengenden Operation muss der Patient sich ausreichend ausruhen.",
+    "vn_b2": "Sau ca phẫu thuật vất vả, bệnh nhân nhất định phải nghỉ ngơi đầy đủ.",
+    "lek": 1
+  },
+  {
+    "word": "ausschließen",
+    "ans": "jemanden (Akk) von etwas (Dat) ausschließen",
+    "type": "Verb",
+    "forms": "schließt aus, schloss aus, hat ausgeschlossen",
+    "ant_b1": "einschließen",
+    "ant_b2": "integrieren",
+    "vnword": "loại trừ, khóa ngoài",
+    "vnans": "loại ai đó ra khỏi điều gì đó",
+    "b1_ex": "Wir dürfen niemanden aus der Gruppe ausschließen.",
+    "vn_b1": "Chúng ta không được phép loại bất kỳ ai khỏi nhóm.",
+    "b2_ex": "Man kann völlig ausschließen, dass er etwas mit dem Betrug zu tun hat.",
+    "vn_b2": "Người ta có thể loại trừ hoàn toàn việc anh ta có dính líu đến vụ lừa đảo này.",
+    "lek": 1
+  },
+  {
+    "word": "ausschließlich",
+    "ans": "sich ausschließlich mit etwas (Dat) beschäftigen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "auch",
+    "ant_b2": "inklusive",
+    "vnword": "duy nhất, độc quyền",
+    "vnans": "chỉ bận tâm duy nhất đến điều gì đó",
+    "b1_ex": "Dieses Angebot gilt ausschließlich für Studenten.",
+    "vn_b1": "Ưu đãi này chỉ dành riêng cho sinh viên.",
+    "b2_ex": "Der Geschäftsführer widmet sich ausschließlich der Umstrukturierung des Unternehmens.",
+    "vn_b2": "Giám đốc điều hành hiện tại chỉ dành toàn bộ thời gian cho việc tái cấu trúc công ty.",
+    "lek": 1
+  },
+  {
+    "word": "aussehen",
+    "ans": "gut oder schlecht aussehen",
+    "type": "Verb",
+    "forms": "sieht aus, sah aus, hat ausgesehen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "trông có vẻ, ngoại hình",
+    "vnans": "trông đẹp hoặc xấu",
+    "b1_ex": "Du siehst heute sehr müde aus.",
+    "vn_b1": "Hôm nay trông bạn rất mệt mỏi.",
+    "b2_ex": "Es sieht ganz danach aus, als ob wir das Projekt verschieben müssten.",
+    "vn_b2": "Có vẻ như chúng ta sẽ phải hoãn dự án lại.",
+    "lek": 1
+  },
+  {
+    "word": "außerhalb",
+    "ans": "sich außerhalb der Stadt (Gen) befinden",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "innerhalb",
+    "ant_b2": "",
+    "vnword": "bên ngoài",
+    "vnans": "ở bên ngoài thành phố",
+    "b1_ex": "Wir wohnen etwas außerhalb der Stadt.",
+    "vn_b1": "Chúng tôi sống ở khu vực ngoài thành phố một chút.",
+    "b2_ex": "Außerhalb der regulären Öffnungszeiten ist das Gebäude nur mit Karte zugänglich.",
+    "vn_b2": "Ngoài giờ mở cửa thông thường, tòa nhà chỉ có thể ra vào bằng thẻ.",
+    "lek": 1
+  },
+  {
+    "word": "äußerlich",
+    "ans": "jemanden (Akk) äußerlich beurteilen",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "innerlich",
+    "ant_b2": "",
+    "vnword": "bề ngoài, hình thức",
+    "vnans": "đánh giá ai đó qua vẻ bề ngoài",
+    "b1_ex": "Äußerlich ist das Haus sehr schön.",
+    "vn_b1": "Bề ngoài ngôi nhà rất đẹp.",
+    "b2_ex": "Äußerlich wirkte er völlig ruhig, aber innerlich war er angespannt.",
+    "vn_b2": "Bề ngoài anh ấy có vẻ hoàn toàn bình tĩnh, nhưng bên trong lại rất căng thẳng.",
+    "lek": 1
+  },
+  {
+    "word": "außer",
+    "ans": "alle außer jemandem (Dat) kommen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "inklusive",
+    "ant_b2": "",
+    "vnword": "ngoại trừ",
+    "vnans": "tất cả ngoại trừ ai đó đến",
+    "b1_ex": "Alle waren pünktlich, außer mir.",
+    "vn_b1": "Tất cả mọi người đều đúng giờ, ngoại trừ tôi.",
+    "b2_ex": "Außer einem leichten Kratzer hat das Auto keinen weiteren Schaden erlitten.",
+    "vn_b2": "Ngoại trừ một vết xước nhẹ, chiếc xe không bị thiệt hại nào khác.",
+    "lek": 1
+  },
+  {
+    "word": "außerdem",
+    "ans": "etwas (Akk) außerdem machen",
+    "type": "Adverb",
+    "forms": "-",
+    "ant_b1": "",
+    "ant_b2": "überdies",
+    "vnword": "ngoài ra",
+    "vnans": "ngoài ra còn làm gì đó",
+    "b1_ex": "Es ist kalt und außerdem regnet es.",
+    "vn_b1": "Trời lạnh và ngoài ra còn mưa nữa.",
+    "b2_ex": "Die Miete ist sehr hoch, außerdem liegt die Wohnung an einer lauten Straße.",
+    "vn_b2": "Giá thuê rất cao, ngoài ra căn hộ còn nằm trên một con đường ồn ào.",
+    "lek": 1
+  },
+  {
+    "word": "die Aussicht, en",
+    "ans": "eine gute Aussicht auf etwas (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: der Aussicht, Pl: die Aussichten",
+    "ant_b1": "",
+    "ant_b2": "die Perspektivlosigkeit",
+    "vnword": "quang cảnh, triển vọng",
+    "vnans": "có triển vọng tốt về điều gì đó",
+    "b1_ex": "Vom Balkon hat man eine schöne Aussicht.",
+    "vn_b1": "Từ ban công, người ta có một quang cảnh đẹp.",
+    "b2_ex": "Die wirtschaftlichen Aussichten für das nächste Jahr haben sich deutlich verbessert.",
+    "vn_b2": "Triển vọng kinh tế cho năm tới đã được cải thiện rõ rệt.",
+    "lek": 1
+  },
+  {
+    "word": "aussprechen",
+    "ans": "etwas (Akk) deutlich aussprechen",
+    "type": "Verb",
+    "forms": "spricht aus, sprach aus, hat ausgesprochen",
+    "ant_b1": "verschweigen",
+    "ant_b2": "zurückhalten",
+    "vnword": "phát âm, nói ra",
+    "vnans": "nói ra/phát âm điều gì đó rõ ràng",
+    "b1_ex": "Wie spricht man dieses Wort aus?",
+    "vn_b1": "Người ta phát âm từ này như thế nào?",
+    "b2_ex": "Er hat seine Bedenken bezüglich des Projekts im Meeting offen ausgesprochen.",
+    "vn_b2": "Anh ấy đã cởi mở nói ra những lo ngại của mình về dự án trong cuộc họp.",
+    "lek": 1
+  },
+  {
+    "word": "ausstellen",
+    "ans": "etwas (Akk) in einem Museum ausstellen",
+    "type": "Verb",
+    "forms": "stellt aus, stellte aus, hat ausgestellt",
+    "ant_b1": "verbergen",
+    "ant_b2": "einziehen",
+    "vnword": "trưng bày, cấp (giấy tờ)",
+    "vnans": "trưng bày cái gì đó trong một bảo tàng",
+    "b1_ex": "Der Arzt muss mir ein Rezept ausstellen.",
+    "vn_b1": "Bác sĩ phải cấp cho tôi một toa thuốc.",
+    "b2_ex": "Die Galerie wird moderne Kunstwerke von lokalen Künstlern ausstellen.",
+    "vn_b2": "Phòng tranh sẽ trưng bày các tác phẩm nghệ thuật hiện đại của các nghệ sĩ địa phương.",
+    "lek": 1
+  },
+{
+    "word": "sich bedanken",
+    "ans": "sich bei jemandem (Dat) für etwas (Akk) bedanken",
+    "type": "Verb",
+    "forms": "bedankt sich, bedankte sich, hat sich bedankt",
+    "ant_b1": "sich beschweren",
+    "ant_b2": "reklamieren",
+    "vnword": "cảm ơn",
+    "vnans": "cảm ơn ai đó về điều gì đó",
+    "b1_ex": "Ich möchte mich für deine Hilfe bedanken.",
+    "vn_b1": "Tôi muốn cảm ơn sự giúp đỡ của bạn.",
+    "b2_ex": "Der Vorstand bedankte sich bei allen Mitarbeitern für ihr großes Engagement.",
+    "vn_b2": "Ban giám đốc đã cảm ơn tất cả nhân viên vì sự tận tâm lớn của họ.",
+    "lek": 1
+  },
+  {
+    "word": "der Bedarf, (Sg.)",
+    "ans": "Bedarf an etwas (Dat) haben",
+    "type": "Nomen",
+    "forms": "Gen: des Bedarf(e)s",
+    "ant_b1": "",
+    "ant_b2": "der Überfluss",
+    "vnword": "nhu cầu",
+    "vnans": "có nhu cầu về cái gì đó",
+    "b1_ex": "Wir haben einen großen Bedarf an neuen Computern.",
+    "vn_b1": "Chúng tôi có nhu cầu lớn về máy tính mới.",
+    "b2_ex": "Der weltweite Bedarf an erneuerbaren Energien steigt derzeit kontinuierlich an.",
+    "vn_b2": "Nhu cầu toàn cầu về năng lượng tái tạo hiện đang tăng lên liên tục.",
+    "lek": 1
+  },
+  {
+    "word": "bedeuten",
+    "ans": "jemandem (Dat) viel bedeuten",
+    "type": "Verb",
+    "forms": "bedeutet, bedeutete, hat bedeutet",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "có ý nghĩa, có nghĩa là",
+    "vnans": "có nhiều ý nghĩa đối với ai đó",
+    "b1_ex": "Was bedeutet dieses Wort auf Vietnamesisch?",
+    "vn_b1": "Từ này có nghĩa là gì trong tiếng Việt?",
+    "b2_ex": "Seine ständige Unterstützung bedeutete ihr in dieser schweren Krisenzeit wirklich sehr viel.",
+    "vn_b2": "Sự hỗ trợ liên tục của anh ấy thực sự có ý nghĩa rất lớn đối với cô trong thời kỳ khủng hoảng khó khăn này.",
+    "lek": 1
+  },
+  {
+    "word": "die Bedeutung, en",
+    "ans": "eine große Bedeutung für jemanden (Akk) haben",
+    "type": "Nomen",
+    "forms": "Gen: der Bedeutung, Pl: die Bedeutungen",
+    "ant_b1": "",
+    "ant_b2": "die Irrelevanz",
+    "vnword": "ý nghĩa, tầm quan trọng",
+    "vnans": "có tầm quan trọng lớn đối với ai đó",
+    "b1_ex": "Dieses Thema hat eine große Bedeutung für unsere Zukunft.",
+    "vn_b1": "Chủ đề này có tầm quan trọng lớn đối với tương lai của chúng ta.",
+    "b2_ex": "Die genaue Bedeutung dieses alten Textes ist bis heute stark umstritten.",
+    "vn_b2": "Ý nghĩa chính xác của văn bản cổ này vẫn còn gây tranh cãi mạnh mẽ cho đến ngày nay.",
+    "lek": 1
+  },
+  {
+    "word": "bedienen",
+    "ans": "eine Maschine (Akk) bedienen",
+    "type": "Verb",
+    "forms": "bedient, bediente, hat bedient",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "phục vụ, điều khiển",
+    "vnans": "điều khiển một cái máy",
+    "b1_ex": "Der Kellner bedient die Gäste im Restaurant sehr freundlich.",
+    "vn_b1": "Người phục vụ phục vụ khách trong nhà hàng rất thân thiện.",
+    "b2_ex": "Um diese komplexe Software zu bedienen, benötigt man eine spezielle Schulung.",
+    "vn_b2": "Để điều khiển phần mềm phức tạp này, người ta cần một khóa đào tạo đặc biệt.",
+    "lek": 1
+  },
+  {
+    "word": "die Bedienungsanleitung, en",
+    "ans": "die Bedienungsanleitung (Akk) genau lesen",
+    "type": "Nomen",
+    "forms": "Gen: der Bedienungsanleitung, Pl: die Bedienungsanleitungen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "sách hướng dẫn sử dụng",
+    "vnans": "đọc kỹ sách hướng dẫn sử dụng",
+    "b1_ex": "Ich verstehe die Bedienungsanleitung für diesen Fernseher nicht.",
+    "vn_b1": "Tôi không hiểu sách hướng dẫn sử dụng cho chiếc tivi này.",
+    "b2_ex": "Laut Bedienungsanleitung darf das Gerät nicht in der Nähe von Wasser aufgestellt werden.",
+    "vn_b2": "Theo sách hướng dẫn sử dụng, thiết bị không được đặt gần nước.",
+    "lek": 1
+  },
+  {
+    "word": "die Bedingung, en",
+    "ans": "eine Bedingung (Akk) erfüllen",
+    "type": "Nomen",
+    "forms": "Gen: der Bedingung, Pl: die Bedingungen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "điều kiện",
+    "vnans": "đáp ứng một điều kiện",
+    "b1_ex": "Unter diesen Bedingungen kann ich nicht arbeiten.",
+    "vn_b1": "Dưới những điều kiện này, tôi không thể làm việc.",
+    "b2_ex": "Der Vertrag wird nur gültig, wenn beide Parteien alle Bedingungen erfüllen.",
+    "vn_b2": "Hợp đồng chỉ có hiệu lực khi cả hai bên đáp ứng mọi điều kiện.",
+    "lek": 1
+  },
+  {
+    "word": "sich beeilen",
+    "ans": "sich (Akk) mit etwas (Dat) beeilen",
+    "type": "Verb",
+    "forms": "beeilt sich, beeilte sich, hat sich beeilt",
+    "ant_b1": "trödeln",
+    "ant_b2": "bummeln",
+    "vnword": "khẩn trương, vội vã",
+    "vnans": "khẩn trương với việc gì đó",
+    "b1_ex": "Wir müssen uns beeilen, sonst verpassen wir den Zug.",
+    "vn_b1": "Chúng ta phải khẩn trương, nếu không chúng ta sẽ lỡ chuyến tàu.",
+    "b2_ex": "Sie musste sich beeilen, um den wichtigen Abgabetermin noch rechtzeitig einzuhalten.",
+    "vn_b2": "Cô ấy phải khẩn trương để kịp thời hạn nộp bài quan trọng.",
+    "lek": 1
+  },
+  {
+    "word": "beenden",
+    "ans": "sein Studium (Akk) beenden",
+    "type": "Verb",
+    "forms": "beendet, beendete, hat beendet",
+    "ant_b1": "anfangen",
+    "ant_b2": "eröffnen",
+    "vnword": "kết thúc, hoàn thành",
+    "vnans": "hoàn thành việc học đại học của mình",
+    "b1_ex": "Ich möchte meine Arbeit vor dem Wochenende beenden.",
+    "vn_b1": "Tôi muốn hoàn thành công việc của mình trước cuối tuần.",
+    "b2_ex": "Nach langen Verhandlungen konnten die beiden Firmen den Konflikt endlich erfolgreich beenden.",
+    "vn_b2": "Sau những cuộc đàm phán kéo dài, hai công ty cuối cùng đã có thể kết thúc thành công cuộc xung đột.",
+    "lek": 1
+  },
+  {
+    "word": "sich befinden",
+    "ans": "sich (Akk) in einem Raum (Dat) befinden",
+    "type": "Verb",
+    "forms": "befindet sich, befand sich, hat sich befunden",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "nằm ở, ở trong tình trạng",
+    "vnans": "đang ở trong một căn phòng",
+    "b1_ex": "Die Toilette befindet sich im ersten Stock.",
+    "vn_b1": "Nhà vệ sinh nằm ở tầng một.",
+    "b2_ex": "Die verletzte Frau befindet sich nach der Operation in einem kritischen Zustand.",
+    "vn_b2": "Người phụ nữ bị thương đang ở trong tình trạng nguy kịch sau ca phẫu thuật.",
+    "lek": 1
+  },
+  {
+    "word": "befreit",
+    "ans": "von den Steuern (Dat) befreit sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "belastet",
+    "ant_b2": "gebunden",
+    "vnword": "được miễn, được giải phóng",
+    "vnans": "được miễn thuế",
+    "b1_ex": "Rentner sind oft von einigen Kosten befreit.",
+    "vn_b1": "Những người hưu trí thường được miễn một số chi phí.",
+    "b2_ex": "Durch ein spezielles Stipendium wurde sie komplett von den hohen Studiengebühren befreit.",
+    "vn_b2": "Thông qua một học bổng đặc biệt, cô ấy đã được miễn hoàn toàn học phí cao.",
+    "lek": 1
+  },
+  {
+    "word": "befriedigend",
+    "ans": "ein befriedigendes Ergebnis (Akk) erzielen",
+    "type": "Adjektiv",
+    "forms": "befriedigender, am befriedigendsten",
+    "ant_b1": "schlecht",
+    "ant_b2": "unzureichend",
+    "vnword": "thỏa đáng, đạt yêu cầu",
+    "vnans": "đạt được một kết quả thỏa đáng",
+    "b1_ex": "Seine Leistungen in der Schule sind befriedigend.",
+    "vn_b1": "Thành tích của anh ấy ở trường đạt yêu cầu.",
+    "b2_ex": "Der gefundene Kompromiss war für beide Verhandlungspartner letztendlich durchaus befriedigend.",
+    "vn_b2": "Thỏa hiệp đạt được cuối cùng hoàn toàn thỏa đáng cho cả hai đối tác đàm phán.",
+    "lek": 1
+  },
+  {
+    "word": "begegnen",
+    "ans": "einem alten Freund (Dat) begegnen",
+    "type": "Verb",
+    "forms": "begegnet, begegnete, ist begegnet",
+    "ant_b1": "verpassen",
+    "ant_b2": "ausweichen",
+    "vnword": "tình cờ gặp, đối mặt",
+    "vnans": "tình cờ gặp một người bạn cũ",
+    "b1_ex": "Ich bin gestern meinem Lehrer auf der Straße begegnet.",
+    "vn_b1": "Hôm qua tôi tình cờ gặp thầy giáo trên phố.",
+    "b2_ex": "Bei ihrem neuen Projekt begegnete das Team unerwarteten technischen Schwierigkeiten.",
+    "vn_b2": "Trong dự án mới của mình, nhóm đã đối mặt với những khó khăn kỹ thuật không mong muốn.",
+    "lek": 1
+  },
+  {
+    "word": "begeistert",
+    "ans": "von der Idee (Dat) begeistert sein",
+    "type": "Adjektiv",
+    "forms": "begeisterter, am begeistertsten",
+    "ant_b1": "gelangweilt",
+    "ant_b2": "gleichgültig",
+    "vnword": "hào hứng, nhiệt tình",
+    "vnans": "hào hứng về ý tưởng đó",
+    "b1_ex": "Ich bin sehr begeistert von diesem neuen Buch.",
+    "vn_b1": "Tôi rất hào hứng với cuốn sách mới này.",
+    "b2_ex": "Das Publikum zeigte sich sichtlich begeistert von der brillanten Leistung der Musiker.",
+    "vn_b2": "Khán giả tỏ ra thấy rõ sự hào hứng với màn trình diễn xuất sắc của các nhạc sĩ.",
+    "lek": 1
+  },
+  {
+    "word": "beginnen",
+    "ans": "mit der Arbeit (Dat) beginnen",
+    "type": "Verb",
+    "forms": "beginnt, begann, hat begonnen",
+    "ant_b1": "aufhören",
+    "ant_b2": "abschließen",
+    "vnword": "bắt đầu",
+    "vnans": "bắt đầu với công việc",
+    "b1_ex": "Wir beginnen den Kurs um neun Uhr.",
+    "vn_b1": "Chúng ta bắt đầu khóa học lúc chín giờ.",
+    "b2_ex": "Wegen der technischen Probleme konnte das Konzert erst mit großer Verspätung beginnen.",
+    "vn_b2": "Do sự cố kỹ thuật, buổi hòa nhạc mới có thể bắt đầu với sự chậm trễ lớn.",
+    "lek": 1
+  },
+  {
+    "word": "der Beginn, (Sg.)",
+    "ans": "gleich zu Beginn (Dat) etwas (Akk) klären",
+    "type": "Nomen",
+    "forms": "Gen: des Beginn(e)s",
+    "ant_b1": "das Ende",
+    "ant_b2": "der Abschluss",
+    "vnword": "sự bắt đầu",
+    "vnans": "làm rõ điều gì đó ngay từ lúc bắt đầu",
+    "b1_ex": "Der Beginn des Films war sehr spannend.",
+    "vn_b1": "Sự bắt đầu của bộ phim rất hấp dẫn.",
+    "b2_ex": "Bereits zu Beginn seiner Karriere zeigte der junge Künstler großes Talent.",
+    "vn_b2": "Ngay từ khi bắt đầu sự nghiệp, nghệ sĩ trẻ đã thể hiện tài năng lớn.",
+    "lek": 1
+  },
+  {
+    "word": "begleiten",
+    "ans": "jemanden (Akk) nach Hause begleiten",
+    "type": "Verb",
+    "forms": "begleitet, begleitete, hat begleitet",
+    "ant_b1": "verlassen",
+    "ant_b2": "im Stich lassen",
+    "vnword": "đồng hành, hộ tống",
+    "vnans": "hộ tống ai đó về nhà",
+    "b1_ex": "Darf ich dich heute Abend nach Hause begleiten?",
+    "vn_b1": "Tối nay tôi có thể đưa bạn về nhà không?",
+    "b2_ex": "Ein erfahrener Mentor wird die neuen Mitarbeiter während der Einarbeitungszeit intensiv begleiten.",
+    "vn_b2": "Một cố vấn giàu kinh nghiệm sẽ đồng hành sát sao cùng các nhân viên mới trong thời gian hội nhập.",
+    "lek": 1
+  },
+  {
+    "word": "begrenzt",
+    "ans": "auf eine bestimmte Zeit (Akk) begrenzt sein",
+    "type": "Adjektiv",
+    "forms": "-",
+    "ant_b1": "unbegrenzt",
+    "ant_b2": "endlos",
+    "vnword": "có hạn, bị giới hạn",
+    "vnans": "bị giới hạn trong một thời gian nhất định",
+    "b1_ex": "Die Teilnehmerzahl für diesen Kurs ist leider begrenzt.",
+    "vn_b1": "Số lượng người tham gia cho khóa học này rất tiếc là có hạn.",
+    "b2_ex": "Das exklusive Angebot ist streng auf maximal fünfhundert interessierte Kunden begrenzt.",
+    "vn_b2": "Ưu đãi độc quyền bị giới hạn nghiêm ngặt ở mức tối đa năm trăm khách hàng quan tâm.",
+    "lek": 1
+  },
+  {
+    "word": "begründen",
+    "ans": "seine Meinung (Akk) gut begründen",
+    "type": "Verb",
+    "forms": "begründet, begründete, hat begründet",
+    "ant_b1": "",
+    "ant_b2": "widerlegen",
+    "vnword": "chứng minh, giải thích lý do",
+    "vnans": "giải thích lý do tốt cho ý kiến của mình",
+    "b1_ex": "Kannst du deine Entscheidung bitte begründen?",
+    "vn_b1": "Bạn có thể vui lòng giải thích lý do cho quyết định của mình không?",
+    "b2_ex": "Der Manager musste den drastischen Personalabbau vor den wütenden Mitarbeitern ausführlich begründen.",
+    "vn_b2": "Người quản lý phải giải thích chi tiết việc cắt giảm nhân sự quyết liệt trước những nhân viên đang tức giận.",
+    "lek": 1
+  },
+  {
+    "word": "die Begründung, en",
+    "ans": "eine logische Begründung (Akk) liefern",
+    "type": "Nomen",
+    "forms": "Gen: der Begründung, Pl: die Begründungen",
+    "ant_b1": "",
+    "ant_b2": "",
+    "vnword": "lý do, sự biện minh",
+    "vnans": "đưa ra một lý do hợp lý",
+    "b1_ex": "Ich brauche eine gute Begründung für deine Verspätung.",
+    "vn_b1": "Tôi cần một lý do chính đáng cho sự chậm trễ của bạn.",
+    "b2_ex": "Ohne eine nachvollziehbare Begründung wird der Antrag vom Ausschuss höchstwahrscheinlich abgelehnt werden.",
+    "vn_b2": "Nếu không có một lý do dễ hiểu, yêu cầu rất có khả năng sẽ bị ủy ban từ chối.",
+    "lek": 1
+  },
+  {
+    "word": "begrüßen",
+    "ans": "jemanden (Akk) herzlich begrüßen",
+    "type": "Verb",
+    "forms": "begrüßt, begrüßte, hat begrüßt",
+    "ant_b1": "verabschieden",
+    "ant_b2": "ignorieren",
+    "vnword": "chào đón, hoan nghênh",
+    "vnans": "chào đón ai đó một cách nồng nhiệt",
+    "b1_ex": "Der Chef begrüßt jeden Morgen alle Mitarbeiter.",
+    "vn_b1": "Sếp chào đón tất cả nhân viên mỗi sáng.",
+    "b2_ex": "Der Bürgermeister begrüßte die internationalen Gäste mit einer sehr emotionalen Rede.",
+    "vn_b2": "Thị trưởng đã chào đón các vị khách quốc tế bằng một bài phát biểu rất xúc động.",
+    "lek": 1
+  },
+  {
+    "word": "behalten",
+    "ans": "etwas (Akk) für sich (Akk) behalten",
+    "type": "Verb",
+    "forms": "behält, behielt, hat behalten",
+    "ant_b1": "abgeben",
+    "ant_b2": "überlassen",
+    "vnword": "giữ lại, ghi nhớ",
+    "vnans": "giữ cái gì đó cho riêng mình",
+    "b1_ex": "Du darfst das Buch gerne behalten.",
+    "vn_b1": "Bạn có thể vui lòng giữ lại cuốn sách.",
+    "b2_ex": "Trotz der extremen Belastung in der Krise konnte er stets einen kühlen Kopf behalten.",
+    "vn_b2": "Bất chấp áp lực cực độ trong khủng hoảng, anh ấy luôn có thể giữ một cái đầu lạnh.",
+    "lek": 1
+  },
+  {
+    "word": "behandeln",
+    "ans": "jemanden (Akk) ungerecht behandeln",
+    "type": "Verb",
+    "forms": "behandelt, behandelte, hat behandelt",
+    "ant_b1": "ignorieren",
+    "ant_b2": "diskriminieren",
+    "vnword": "đối xử, điều trị, đề cập",
+    "vnans": "đối xử bất công với ai đó",
+    "b1_ex": "Der Arzt behandelt den Patienten im Krankenhaus.",
+    "vn_b1": "Bác sĩ điều trị cho bệnh nhân trong bệnh viện.",
+    "b2_ex": "Dieses kontroverse Thema wird im nächsten Kapitel des Buches ausführlich behandelt.",
+    "vn_b2": "Chủ đề gây tranh cãi này sẽ được đề cập chi tiết trong chương tiếp theo của cuốn sách.",
+    "lek": 1
+  },
+  {
+    "word": "behaupten",
+    "ans": "etwas (Akk) von sich (Dat) behaupten",
+    "type": "Verb",
+    "forms": "behauptet, behauptete, hat behauptet",
+    "ant_b1": "zugeben",
+    "ant_b2": "widerrufen",
+    "vnword": "khẳng định, quả quyết",
+    "vnans": "tự khẳng định điều gì đó về mình",
+    "b1_ex": "Er behauptet, dass er nicht gelogen hat.",
+    "vn_b1": "Anh ấy khẳng định rằng anh ấy đã không nói dối.",
+    "b2_ex": "Der Angeklagte behauptete vor Gericht standhaft, zur Tatzeit zu Hause gewesen zu sein.",
+    "vn_b2": "Bị cáo kiên quyết khẳng định trước tòa rằng mình đã ở nhà vào thời điểm xảy ra vụ án.",
+    "lek": 1
+  },
+  
+  
+  
+  
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
     ];
 
-    let isMixedMode = false;
-    let isNoStreakMode = false;
-    let isWaitingForNext = false;
+    let isMixedMode = false; // Cờ theo dõi chế độ thi tổng hợp
+    let isNoStreakMode = false; // CỜ MỚI: Theo dõi chế độ Ôn nhanh (Không xóa streak)
+    let isWaitingForNext = false; // CỜ MỚI: Đợi người dùng bấm Enter để qua câu nếu làm sai ở chế độ Ôn nhanh
 
-    // ĐÃ SỬA: Dùng bộ khóa mới hoàn toàn cho repo mới
-    let currentLek = localStorage.getItem('b2_test_lek') || 1; 
+    let currentLek = localStorage.getItem('b2_last_lek') || 1; 
     if (currentLek !== 'fehler') currentLek = parseInt(currentLek) || 1;
     
-    // ĐÃ SỬA: Dùng b2_pro_test thay vì b2_pro_v1
-    let mastery = JSON.parse(localStorage.getItem('b2_pro_test')) || {};
+    let mastery = JSON.parse(localStorage.getItem('b2_pro_v1')) || {};
     let session = [];
     let idx = 0;
     let penaltyMode = false;
@@ -194,52 +2023,45 @@
     let isAdvancedMode = false;
     let isTransitioning = false; 
 
-    // --- HỆ THỐNG ÂM THANH MỚI (GOOGLE TRANSLATE) ---
-    // Tạo phần tử Audio bằng JavaScript thay vì HTML để tránh lỗi
-    const ttsAudio = new Audio();
-    ttsAudio.playbackRate = 0.9;
-    let isAudioUnlocked = false;
-
-    // Mở khóa Audio trên di động
-    function unlockAudio() {
-        if (isAudioUnlocked) return;
-        ttsAudio.play().then(() => {
-            ttsAudio.pause();
-            isAudioUnlocked = true;
-        }).catch(() => {
-            // Lỗi im lặng do chưa có src, nhưng vẫn giúp xin quyền
-            isAudioUnlocked = true;
+    const loadVoices = () => {
+        return new Promise((resolve) => {
+            let voices = window.speechSynthesis.getVoices();
+            if (voices.length !== 0) resolve(voices);
+            else {
+                window.speechSynthesis.onvoiceschanged = () => {
+                    voices = window.speechSynthesis.getVoices();
+                    resolve(voices);
+                };
+            }
         });
-        document.removeEventListener('touchstart', unlockAudio);
-        document.removeEventListener('click', unlockAudio);
-    }
-    document.addEventListener('touchstart', unlockAudio);
-    document.addEventListener('click', unlockAudio);
+    };
+    loadVoices().then(voices => console.log("Voices loaded successfully!"));
 
     function speakGerman(text) {
-        if (!text) return;
-        
-        let cleanText = text.split(',')[0].trim();
-        cleanText = cleanText
-            .replace(/\+\s*(jmdm\.|jmdn\.|jmd\.|etw\.|etwas)\s*\((Da|Akk|D|A|Dat)\)/gi, (match, obj, kasus) => {
-                let k = /Da|D|Dat/i.test(kasus) ? "Dativ" : /Gen|G/i.test(kasus) ? "Genitiv" : "Akkusativ";
-                let o = obj.includes('jmdm') ? "jemandem" : obj.includes('jmdn') ? "jemanden" : obj.includes('jmd') ? "jemand" : "etwas";
-                return `plus ${k} ${o}`;
-            })
-            .replace(/\bDa\b|\bDat\b|\bD\b/g, "Dativ")
-            .replace(/\bAkk\b|\bA\b/g, "Akkusativ")
-            .replace(/\bGen\b|\bG\b/g, "Genitiv") 
-            .replace(/\bjmdm\b/gi, "jemandem").replace(/\bjmdn\b/gi, "jemanden").replace(/\betw\b/gi, "etwas")
-            .replace(/\b(r|r\.)\/(e|e\.)\s+(\w+)/g, "der $3, die $3")
-            .replace(/\br\.\s/g, "der ").replace(/\be\.\s/g, "die ").replace(/\bs\.\s/g, "das ");
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.cancel();
+            let cleanText = text.split(',')[0].trim();
+            cleanText = cleanText
+                .replace(/\+\s*(jmdm\.|jmdn\.|jmd\.|etw\.|etwas)\s*\((Da|Akk|D|A|Dat)\)/gi, (match, obj, kasus) => {
+                    let k = /Da|D|Dat/i.test(kasus) ? "Dativ" : "Akkusativ";
+                    let o = obj.includes('jmdm') ? "jemandem" : obj.includes('jmdn') ? "jemanden" : obj.includes('jmd') ? "jemand" : "etwas";
+                    return `plus ${k} ${o}`;
+                })
+                .replace(/\bDa\b|\bDat\b|\bD\b/g, "Dativ").replace(/\bAkk\b|\bA\b/g, "Akkusativ")
+				.replace(/\bGen\b|\bG\b/g, "Genitiv") 
+                .replace(/\bjmdm\b/gi, "jemandem").replace(/\bjmdn\b/gi, "jemanden").replace(/\betw\b/gi, "etwas")
+                .replace(/\b(r|r\.)\/(e|e\.)\s+(\w+)/g, "der $3, die $3")
+                .replace(/\br\.\s/g, "der ").replace(/\be\.\s/g, "die ").replace(/\bs\.\s/g, "das ");
 
-        // API ẩn của Google Translate (Cực kỳ ổn định)
-        const url = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=de-DE&q=${encodeURIComponent(cleanText)}`;
-        
-        ttsAudio.src = url;
-        ttsAudio.play().catch(err => console.log("Lỗi TTS: ", err));
+            const utterance = new SpeechSynthesisUtterance(cleanText);
+            const voices = window.speechSynthesis.getVoices();
+            const stefan = voices.find(v => v.name.includes("Stefan") || v.name.includes("Google Deutsch"));
+            utterance.voice = stefan || voices.find(v => v.lang.includes("de"));
+            utterance.lang = 'de-DE';
+            utterance.rate = 0.8; 
+            window.speechSynthesis.speak(utterance);
+        }
     }
-    // --- KẾT THÚC HỆ THỐNG ÂM THANH ---
 
     function exportData() {
         const dataStr = JSON.stringify(mastery);
@@ -265,14 +2087,15 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
+                const content = e.target.result;
                 try {
-                    const parsed = JSON.parse(e.target.result);
+                    const parsed = JSON.parse(content);
                     mastery = parsed;
                     save();
-                    alert("✨ Phục hồi Streak thành công!");
+                    alert("✨ Phục hồi Streak thành công! Mọi thứ đã trở lại.");
                     location.reload();
                 } catch(err) {
-                    alert("File không hợp lệ hoặc bị lỗi!");
+                    alert("File không hợp lệ hoặc bị lỗi! Vui lòng chọn đúng file Backup.");
                 }
             };
             reader.readAsText(file);
@@ -282,20 +2105,23 @@
 
     function selectFehler() {
         currentLek = 'fehler';
-        localStorage.setItem('b2_test_lek', 'fehler');
+        localStorage.setItem('b2_last_lek', 'fehler');
         document.querySelectorAll('#lek-grid .btn-sub').forEach(el => el.style.borderColor = 'var(--border)');
         document.getElementById('btn-fehler').style.background = 'rgba(248, 113, 113, 0.2)';
         renderList();
     }
 
     function startAdvancedMode() {
-        let notMastered = data.filter(v => mastery[v.word].a && mastery[v.word].s < 3);
+        let notMastered = data.filter(v => mastery[v.word].a && mastery[v.word].s < 2);
         if (notMastered.length > 0) {
-            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!`);
+            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\n\nBạn phải học thuộc (đạt 2/2 🔥) TOÀN BỘ từ vựng và câu sai ở các bài học trước.\n\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!/          Du bist noch nicht für B2 berechtigt!
+Du musst alle Vokabeln und fehlerhaften Sätze aus den vorherigen Lektionen auswendig lernen, um 2/2 🔥 zu erreichen.
+Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         }
+
         isAdvancedMode = true;
         let availablePool = data.filter(v => mastery[v.word].a); 
-        if (availablePool.length === 0) return alert("Vui lòng chọn ít nhất 1 câu!");
+        if (availablePool.length === 0) return alert("Vui lòng chọn ít nhất 1 câu trong danh sách để ôn!");
         
         session = availablePool.sort(() => 0.5 - Math.random()).slice(0, 5);
         idx = 0; currentStep = 1; penaltyMode = false; penaltyCount = 0; isWaitingForNext = false;
@@ -320,7 +2146,7 @@
             .replace(/\bs\b/g, "das")
             .replace(/\b(d|da|dat)\b/g, "dativ")
             .replace(/\b(a|akk)\b/g, "akkusativ")
-            .replace(/\b(g|gen)\b/g, "genitiv") 
+            .replace(/\b(g|gen)\b/g, "genitiv") // Thêm dòng này để hiểu chữ Gen
             .replace(/\b(jemandem|jemanden|jemand)\s+(etwas)\b/g, "$2 $1");
     }
 
@@ -334,7 +2160,7 @@
             b.innerText = `Lek ${i}`;
             b.onclick = () => {
                 currentLek = i;
-                localStorage.setItem('b2_test_lek', i);
+                localStorage.setItem('b2_last_lek', i);
                 document.querySelectorAll('#lek-grid .btn-sub').forEach(el => el.style.borderColor = 'var(--border)');
                 document.getElementById('btn-fehler').style.background = 'rgba(255,255,255,0.05)';
                 b.style.borderColor = 'var(--primary)';
@@ -354,13 +2180,14 @@
             }
         });
         
-        save(); // ĐÃ SỬA: Gọi hàm save() thay vì setItem thủ công bị lỗi
+        localStorage.setItem('b2_pro_v1', JSON.stringify(mastery));
+        renderList();
         renderHeat();
     }
 
     function renderList() {
         const currentData = data.filter(v => currentLek === 'fehler' ? (v.type && v.type.includes("Fehler")) : v.lek == currentLek);
-        const masteredCount = currentData.filter(v => mastery[v.word] && mastery[v.word].s >= 3).length;
+        const masteredCount = currentData.filter(v => mastery[v.word] && mastery[v.word].s >= 2).length;
         
         const statsEl = document.getElementById('lek-stats');
         if(statsEl) {
@@ -383,11 +2210,12 @@
                         <div style="font-size:11px; color:rgba(248, 250, 252, 0.5)">${v.vnans}</div>
                     </div>
                 </div>
-                <span style="font-size:11px; font-weight:bold; color:var(--success)">🔥 ${mastery[v.word].s}/3</span>
+                <span style="font-size:11px; font-weight:bold; color:var(--success)">🔥 ${mastery[v.word].s}/2</span>
             </div>
         `).join('');
     }
 
+    // UPDATE: HÀM KHỞI TẠO HỖ TRỢ 3 CHẾ ĐỘ
     function startSession(mode = 'normal') {
         isAdvancedMode = false;
         isMixedMode = (mode === 'mixed' || mode === 'quick');
@@ -396,20 +2224,29 @@
         let availablePool = [];
 
         if (isMixedMode) {
-            availablePool = data.filter(v => mastery[v.word].a && mastery[v.word].s >= 3);
-            if (availablePool.length === 0) return alert("Bạn chưa có từ nào đạt đủ Streak 3/3 để ôn tập!");
+            // Lấy từ đã đạt Streak 2
+            availablePool = data.filter(v => mastery[v.word].a && mastery[v.word].s >= 2);
+            if (availablePool.length === 0) {
+                return alert("Bạn chưa có từ nào đạt đủ Streak 2/2 để ôn tập!");
+            }
         } else {
+            // Chế độ học thường (Streak < 2)
             availablePool = data.filter(v => 
                 (currentLek === 'fehler' ? (v.type && v.type.includes("Fehler")) : v.lek == currentLek) && 
                 mastery[v.word].a && 
-                mastery[v.word].s < 3
+                mastery[v.word].s < 2
             );
-            if (availablePool.length === 0) return alert("Chúc mừng! Bạn đã học thuộc hết (đạt 3/3) các từ ở bài này!");
+            if (availablePool.length === 0) {
+                return alert("Chúc mừng! Bạn đã học thuộc hết (đạt 2/2) các từ ở bài này!");
+            }
         }
 
+        // BỐC TỪ VÀ XÁO TRỘN ĐÚNG LOGIC
         if (isMixedMode) {
+            // Chế độ Ôn tập (Hỗn hợp / Nhanh): Xáo trộn TOÀN BỘ kho từ trước, rồi bốc ngẫu nhiên 15 từ
             session = availablePool.sort(() => Math.random() - 0.5).slice(0, 15);
         } else {
+            // Chế độ Học mới: Bốc đúng 5 từ đầu tiên chưa thuộc, rồi xáo trộn thứ tự hỏi
             session = availablePool.slice(0, 5).sort(() => Math.random() - 0.5);
         }
 
@@ -438,9 +2275,10 @@
         if (currentStep !== 1 && currentStep !== 2) currentStep = 1;
 
         let fullType = (v.type || "Wort").replace(/\bAdj\.?\b/gi, "Adjektiv").replace(/\bAdv\.?\b/gi, "Adverb");
-        const stepText = isAdvancedMode ? (currentStep === 1 ? "B2 CỤM TỪ (Dịch)" : "B2 VÍ DỤ (Dịch nguyên câu)") : (currentStep === 1 ? "BƯỚC 1: TỪ GỐC" : "BƯỚC 2: CỤM TỪ");
+        const stepText = isAdvancedMode ? (currentStep === 1 ? "B2 CỤM TỪ (Dịch)" : "B2 VÍ DỤ (Dịch nguyên câu)") : (currentStep === 1 ? "BƯỚC 1: TỪ GỐC/SCHRITT 1: SCHLÜSSELWÖRTER" : "BƯỚC 2: CỤM TỪ/SCHRITT 2: PHRASEN");
         const currentVN = isAdvancedMode ? (currentStep === 1 ? v.vnans : v.vn_b2) : (currentStep === 1 ? v.vnword : v.vnans);
 
+        // Hiển thị thêm Tag ⚡ nếu đang ở chế độ Ôn nhanh
         let quickModeTag = isNoStreakMode ? `<span style="color: #34d399;">⚡ ÔN NHANH</span> | ` : "";
 
         document.getElementById('q-type').innerHTML = `${quickModeTag}Wort ${idx + 1}/${session.length} | <span style="color: #fde047;">${fullType}</span> | ${stepText}`;
@@ -467,14 +2305,14 @@
         if (penaltyMode) {
             dotsContainer.innerHTML = `
                 <div style="display: flex; gap: 8px;">
-                    ${[1,2,3].map(i => `<div class="dot ${penaltyCount >= i ? 'active' : ''}" style="${penaltyCount >= i ? 'background:var(--danger); box-shadow: 0 0 10px var(--danger);' : ''}"></div>`).join('')}
+                    ${[1,2].map(i => `<div class="dot ${penaltyCount >= i ? 'active' : ''}" style="${penaltyCount >= i ? 'background:var(--danger); box-shadow: 0 0 10px var(--danger);' : ''}"></div>`).join('')}
                 </div>
                 <div style="font-size: 10px; color: var(--danger); font-weight: bold;">BITTE CẨN THẬN!</div>
             `;
         } else {
             dotsContainer.innerHTML = `
                 <div style="display: flex; gap: 6px;">
-                    ${[1,2,3].map(i => `
+                    ${[1,2].map(i => `
                         <div class="dot ${mastery[v.word].s >= i ? 'active' : ''}" 
                              style="width: 6px; height: 6px; ${mastery[v.word].s >= i ? 'background: #fbbf24; box-shadow: 0 0 8px #fbbf24;' : ''}">
                         </div>`).join('')}
@@ -499,6 +2337,7 @@
         const normTarget = normalizeGerman(target);
         const correct = normInput === normTarget;
 
+        // 1. Kiểm tra lỗi thiếu số nhiều (Logic cũ của bạn)
         if (!correct && currentStep === 1 && (v.type||"").toLowerCase().includes("nomen") && !penaltyMode && !isAdvancedMode) {
             const parts = target.split(',');
             if (parts.length > 1) {
@@ -514,24 +2353,25 @@
         }
 
         if (!correct && !penaltyMode) {
-            const cleanInput = normInput.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
-            const cleanTarget = normTarget.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
-            
-            if (cleanInput === cleanTarget && cleanTarget !== normTarget) {
-                input.style.background = "rgba(251, 191, 36, 0.2)";
-                document.getElementById('fb').innerHTML = `
-                    <div style="color: #fbbf24; font-weight: bold; margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid #fbbf24; text-align: left;">
-                        <span style="font-size: 16px;">⚠️ Gần đúng rồi!</span><br>
-                        <span style="font-size: 13px; font-weight: normal; color: #f8fafc; opacity: 0.9;">Bạn đang thiếu đuôi <b>(Akk)</b>, <b>(Dat)</b> hoặc <b>(Gen)</b> kìa.<br>Hãy điền nốt vào để qua câu nhé!</span>
-                    </div>`;
-                return; 
-            }
+        const cleanInput = normInput.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
+        const cleanTarget = normTarget.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
+        
+        if (cleanInput === cleanTarget && cleanTarget !== normTarget) {
+            input.style.background = "rgba(251, 191, 36, 0.2)";
+            document.getElementById('fb').innerHTML = `
+                <div style="color: #fbbf24; font-weight: bold; margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid #fbbf24; text-align: left;">
+                    <span style="font-size: 16px;">⚠️ Gần đúng rồi!</span><br>
+                    <span style="font-size: 13px; font-weight: normal; color: #f8fafc; opacity: 0.9;">Bạn đang thiếu đuôi <b>(Akk)</b>, <b>(Dat)</b> hoặc <b>(Gen)</b> kìa.<br>Hãy điền nốt vào để qua câu nhé!</span>
+                </div>`;
+            return; 
         }
+    }
 
+        // 3. XỬ LÝ KHI GÕ ĐÚNG 100%
         if (correct) {
             speakGerman(target);
             if (penaltyMode) {
-                if (++penaltyCount >= 3) {
+                if (++penaltyCount >= 2) {
                     penaltyMode = false;
                     penaltyCount = 0;
                     input.style.background = "var(--success)";
@@ -575,6 +2415,7 @@
                 }
             }
         } else {
+            // 4. XỬ LÝ KHI GÕ SAI HOÀN TOÀN
             speakGerman(target);
             
             if (isNoStreakMode) {
@@ -602,7 +2443,7 @@
         const primaryDisplay = isAdvancedMode ? (currentStep === 1 ? v.ans : v.b2_ex) : (currentStep === 1 ? v.word : v.ans);
         const secondaryDisplay = isAdvancedMode ? (currentStep === 1 ? v.word : v.ans) : (currentStep === 1 ? v.ans : v.word);
 
-        let warningText = "⚠️ Sai rồi! Hãy gõ lại chính xác 3 lần!";
+        let warningText = "⚠️ Sai rồi! Hãy gõ lại chính xác 2 lần! /Falsch! Bitte geben Sie es dreimal richtig ein!";
         if (isNoStreakMode) {
             warningText = "⚠️ Sai rồi! (Streak được bảo toàn). Hãy xem kỹ đáp án và <u style='color:#fff'>bấm Enter</u> để đi tiếp!";
         }
@@ -615,8 +2456,17 @@
                 ${!isCorrect ? `<div style="font-size:12px; color:rgba(255,255,255,0.5); margin-bottom:10px;">Ghi chú: ${secondaryDisplay}</div>` : ''}
                 <div style="font-size:12px; margin-bottom:5px; color:var(--success)">VN (Gốc): ${v.vnword}</div>
                 <div style="font-size:13px; margin-bottom:10px; opacity:0.9">VN (Cụm): ${v.vnans}</div>
-                <div style="font-size:11px; margin-bottom:10px; opacity:0.7; font-style: italic;">${v.forms}</div>
-                <div style="font-size:13px; border-top:1px solid var(--border); padding-top:10px">
+               <div style="font-size:11px; margin-bottom:10px; opacity:0.7; font-style: italic;">${v.forms}</div>
+
+				${(v.ant_b1 || v.ant_b2) ? `
+				<div style="font-size: 13px; margin-top: 6px; color: var(--danger); background: rgba(248, 113, 113, 0.1); padding: 8px; border-radius: 6px;">
+					<b style="text-transform: uppercase; font-size: 11px;">Trái nghĩa:</b><br>
+					${v.ant_b1 ? `<span style="color:#f8fafc; font-weight:bold; font-size: 14px;">${v.ant_b1}</span> (B1)` : ''} 
+					${v.ant_b1 && v.ant_b2 ? ' | ' : ''} 
+					${v.ant_b2 ? `<span style="color:#fde047; font-weight:bold; font-size: 14px;">${v.ant_b2}</span> (B2)` : ''}
+				</div>` : ''}
+
+				<div style="font-size:13px; border-top:1px solid var(--border); padding-top:10px">
                     <p style="margin:5px 0 2px 0; color: #f8fafc;"><b>B1+:</b> ${v.b1_ex}</p><p style="margin:0 0 10px 0; font-size:12px; opacity:0.7; font-style: italic;">${v.vn_b1}</p>
                     <p style="margin:5px 0 2px 0; color: #f8fafc;"><b>B2:</b> ${v.b2_ex}</p><p style="margin:0 0 5px 0; font-size:12px; opacity:0.7; font-style: italic;">${v.vn_b2}</p>
                 </div>
@@ -625,8 +2475,11 @@
         `;
     }
 
-    window.addEventListener('keydown', (e) => {
+    // UPDATE: XỬ LÝ ENTER CHO CHẾ ĐỘ CHỜ (KHI GÕ SAI Ở ÔN NHANH)
+   window.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
+            // 1. KHÓA CHẶT TÍNH NĂNG XUỐNG DÒNG: 
+            // Đảm bảo dù gõ phạt 3 lần hay 10 lần, con trỏ chuột vẫn ở dòng đầu tiên, không bị tụt chữ.
             e.preventDefault(); 
             
             if (isTransitioning) return; 
@@ -638,18 +2491,20 @@
             if (!menuScreen.classList.contains('hidden')) { startSession('normal'); return; }
             if (document.getElementById('finish-card')) { location.reload(); return; }
             if (!quizScreen.classList.contains('hidden')) {
+                // 2. GIỮ NGUYÊN TÍNH NĂNG CHỜ BẤM ENTER CỦA BẠN
                 if (typeof isWaitingForNext !== 'undefined' && isWaitingForNext) {
                     isWaitingForNext = false;
                     if (currentStep === 1) {
-                        currentStep = 2; 
+                        currentStep = 2; // Qua bước cụm từ
                     } else {
                         currentStep = 1;
-                        idx++; 
+                        idx++; // Qua từ tiếp theo
                     }
                     showWord();
                     return;
                 }
                 
+                // 3. XỬ LÝ KIỂM TRA TỪ
                 if (input && input.value.trim() !== "") { processCheck(); }
             }
         }
@@ -680,7 +2535,11 @@
                     <div id="heat-detail-${index}" class="hidden" style="margin-top: 10px; border-top: 1px dashed rgba(255,255,255,0.1); padding-top: 10px;">
                         <div style="font-size: 12px; color: #cbd5e1;"><b>Nghĩa:</b> ${v.vnword} | <i style="opacity: 0.8">${v.vnans}</i></div>
                         <div style="font-size: 11px; margin-top: 4px; opacity: 0.6; font-style: italic;">${v.forms}</div>
-                        <div style="font-size: 12px; margin-top: 8px; color: #94a3b8; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
+					${(v.ant_b1 || v.ant_b2) ? `
+					<div style="font-size: 11px; margin-top: 4px; color: var(--danger);">
+						<b>Trái nghĩa:</b> ${v.ant_b1 ? `${v.ant_b1} (B1)` : ''} ${v.ant_b1 && v.ant_b2 ? ' | ' : ''} ${v.ant_b2 ? `${v.ant_b2} (B2)` : ''}
+					</div>` : ''}
+					<div style="font-size: 12px; margin-top: 8px; color: #94a3b8; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 8px;">
                             <p style="margin: 0 0 4px 0; color: #f8fafc;"><b>B1:</b> ${v.b1_ex}</p><p style="margin: 0 0 10px 0; opacity: 0.7; font-style: italic;">${v.vn_b1}</p>
                             <p style="margin: 0 0 4px 0; color: #f8fafc;"><b>B2:</b> ${v.b2_ex}</p><p style="margin: 0; opacity: 0.7; font-style: italic;">${v.vn_b2}</p>
                         </div>
@@ -700,10 +2559,7 @@
         }
     }
 
-    function save() { 
-        localStorage.setItem('b2_pro_test', JSON.stringify(mastery)); // ĐÃ SỬA: Sửa đúng tên khóa bộ nhớ
-        renderList(); 
-    }
+    function save() { localStorage.setItem('b2_pro_v1', JSON.stringify(mastery)); renderList(); }
     function toggleAll(st) { data.forEach(v => mastery[v.word].a = st); save(); renderList(); }
     function resetStreak() { if(confirm("Xóa streak?")) { data.forEach(v => mastery[v.word].s = 0); save(); renderList(); } }
     function resetHeat() { if(confirm("Xóa heatmap?")) { data.forEach(v => mastery[v.word].w = 0); save(); renderHeat(); } }
