@@ -18,7 +18,6 @@
         }
 
         body {
-            /* Áp dụng font Nunito cho toàn bộ ứng dụng */
             font-family: 'Nunito', Roboto, Helvetica, Arial, sans-serif;
             background: radial-gradient(circle at top right, #1e1b4b, #0a0f1d);
             color: var(--text);
@@ -79,10 +78,9 @@
             letter-spacing: 1px; 
             font-variant-ligatures: none; 
             
-            /* 3 DÒNG MỚI DÀNH RIÊNG CHO TEXTAREA */
-            resize: none; /* Cấm kéo giãn khung lung tung */
-            line-height: 1.5; /* Khoảng cách dòng thoáng mắt */
-            overflow: hidden; /* Giấu thanh cuộn dọc cho đẹp */
+            resize: none; 
+            line-height: 1.5; 
+            overflow: hidden; 
         }
 
         .feedback-box { min-height: 70px; margin: 15px 0; text-align: center; font-size: 14px; }
@@ -102,8 +100,6 @@
 </head>
 <body>
 
-<audio id="my-audio-player" playsinline style="display:none;"></audio>
-
 <div class="container">
     <div id="menu-screen">
         <div class="glass-card">
@@ -119,21 +115,21 @@
             <button class="btn-main" onclick="startSession('normal')">Bắt đầu học (5 từ)/Lerne (5 Wörter)</button>
             
             <div style="display: flex; gap: 8px; margin-top: 10px;">
-                <button class="btn-main" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('mixed')">🔥 Ôn hỗn hợp (Tính Streak)-Gemischte Lernen</button>
-                <button class="btn-main" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('quick')">⚡ Ôn nhanh (Không phạt)- Kurzrezension (Kein Steak ging verloren)!</button>
+                <button class="btn-main" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('mixed')">🔥 Ôn hỗn hợp (Tính Streak)</button>
+                <button class="btn-main" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('quick')">⚡ Ôn nhanh (Không phạt)</button>
             </div>
             
             <div style="display: flex; gap: 8px; margin-top: 15px;">
-                <button class="btn-sub" style="color: #34d399; border-color: #34d399; font-weight: bold;" onclick="exportData()">💾 Sao lưu Streak / Streak-Backup</button>
-                <button class="btn-sub" style="color: #60a5fa; border-color: #60a5fa; font-weight: bold;" onclick="importData()">📂 Phục hồi Streak / Streak wiederherstellung</button>
+                <button class="btn-sub" style="color: #34d399; border-color: #34d399; font-weight: bold;" onclick="exportData()">💾 Sao lưu</button>
+                <button class="btn-sub" style="color: #60a5fa; border-color: #60a5fa; font-weight: bold;" onclick="importData()">📂 Phục hồi</button>
             </div>
         </div>
         
         <div class="glass-card">
             <div class="btn-group">
-                <button class="btn-sub" onclick="toggleAll(true)">Chọn hết/Alle auswählen</button>
-                <button class="btn-sub" onclick="toggleAll(false)">Bỏ chọn/Auswahl aufheben</button>
-                <button class="btn-sub" style="color: var(--danger)" onclick="resetStreak()">Xóa Streak/Streak löschen</button>
+                <button class="btn-sub" onclick="toggleAll(true)">Chọn hết</button>
+                <button class="btn-sub" onclick="toggleAll(false)">Bỏ chọn</button>
+                <button class="btn-sub" style="color: var(--danger)" onclick="resetStreak()">Xóa Streak</button>
             </div>
             <div id="vocab-list" style="max-height: 200px; overflow-y: auto;"></div>
         </div>
@@ -155,7 +151,7 @@
         <div class="glass-card">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px">
                 <span style="font-size: 13px; font-weight: 700; color: var(--danger)">TỪ HAY SAI (HEATMAP)</span>
-                <span style="font-size: 11px; cursor: pointer; opacity: 0.6" onclick="resetHeat()">Xóa hết - Alles löschen</span>
+                <span style="font-size: 11px; cursor: pointer; opacity: 0.6" onclick="resetHeat()">Xóa hết</span>
             </div>
             <div id="heat-cloud"></div>
         </div>
@@ -163,8 +159,7 @@
 </div>
 
 <script>
-
-    // BẠN DÁN DATA CỦA BẠN VÀO ĐÂY NHÉ
+    // Dữ liệu test
     const data = [
        {
         "word": "verantwortlich",
@@ -181,14 +176,16 @@
     }
     ];
 
-    let isMixedMode = false; 
-    let isNoStreakMode = false; 
-    let isWaitingForNext = false; 
+    let isMixedMode = false;
+    let isNoStreakMode = false;
+    let isWaitingForNext = false;
 
-    let currentLek = localStorage.getItem('b2_last_lek') || 1; 
+    // ĐÃ SỬA: Dùng bộ khóa mới hoàn toàn cho repo mới
+    let currentLek = localStorage.getItem('b2_test_lek') || 1; 
     if (currentLek !== 'fehler') currentLek = parseInt(currentLek) || 1;
     
-    let mastery = JSON.parse(localStorage.getItem('b2_pro_v1')) || {};
+    // ĐÃ SỬA: Dùng b2_pro_test thay vì b2_pro_v1
+    let mastery = JSON.parse(localStorage.getItem('b2_pro_test')) || {};
     let session = [];
     let idx = 0;
     let penaltyMode = false;
@@ -197,32 +194,31 @@
     let isAdvancedMode = false;
     let isTransitioning = false; 
 
-    // --- HỆ THỐNG ÂM THANH MỚI (CHỐNG CHẶN TRÊN MOBILE) ---
-    const audioPlayer = document.getElementById('my-audio-player');
+    // --- HỆ THỐNG ÂM THANH MỚI (GOOGLE TRANSLATE) ---
+    // Tạo phần tử Audio bằng JavaScript thay vì HTML để tránh lỗi
+    const ttsAudio = new Audio();
+    ttsAudio.playbackRate = 0.9;
     let isAudioUnlocked = false;
 
-    // Thủ thuật mở khóa Audio cho iOS/Android ngay lần bấm đầu tiên
+    // Mở khóa Audio trên di động
     function unlockAudio() {
         if (isAudioUnlocked) return;
-        
-        // Gọi play() một lần để trình duyệt cấp quyền phát âm thanh
-        audioPlayer.play().then(() => {
-            audioPlayer.pause();
+        ttsAudio.play().then(() => {
+            ttsAudio.pause();
             isAudioUnlocked = true;
-            console.log("🔓 Audio đã được mở khóa!");
-        }).catch(err => {
-            isAudioUnlocked = true; // Bỏ qua lỗi rỗng
+        }).catch(() => {
+            // Lỗi im lặng do chưa có src, nhưng vẫn giúp xin quyền
+            isAudioUnlocked = true;
         });
-
-        document.removeEventListener('click', unlockAudio);
         document.removeEventListener('touchstart', unlockAudio);
+        document.removeEventListener('click', unlockAudio);
     }
-    
-    // Gắn sự kiện vào toàn màn hình
-    document.addEventListener('click', unlockAudio);
     document.addEventListener('touchstart', unlockAudio);
+    document.addEventListener('click', unlockAudio);
 
     function speakGerman(text) {
+        if (!text) return;
+        
         let cleanText = text.split(',')[0].trim();
         cleanText = cleanText
             .replace(/\+\s*(jmdm\.|jmdn\.|jmd\.|etw\.|etwas)\s*\((Da|Akk|D|A|Dat)\)/gi, (match, obj, kasus) => {
@@ -237,14 +233,11 @@
             .replace(/\b(r|r\.)\/(e|e\.)\s+(\w+)/g, "der $3, die $3")
             .replace(/\br\.\s/g, "der ").replace(/\be\.\s/g, "die ").replace(/\bs\.\s/g, "das ");
 
-        // Dùng Endpoint Googleapis (Cực kỳ ổn định và không bị chặn CORS)
+        // API ẩn của Google Translate (Cực kỳ ổn định)
         const url = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=de-DE&q=${encodeURIComponent(cleanText)}`;
         
-        audioPlayer.src = url;
-        audioPlayer.playbackRate = 0.9;
-        audioPlayer.play().catch(err => {
-            console.log("Lỗi phát âm thanh: ", err);
-        });
+        ttsAudio.src = url;
+        ttsAudio.play().catch(err => console.log("Lỗi TTS: ", err));
     }
     // --- KẾT THÚC HỆ THỐNG ÂM THANH ---
 
@@ -272,15 +265,14 @@
             if (!file) return;
             const reader = new FileReader();
             reader.onload = function(e) {
-                const content = e.target.result;
                 try {
-                    const parsed = JSON.parse(content);
+                    const parsed = JSON.parse(e.target.result);
                     mastery = parsed;
                     save();
-                    alert("✨ Phục hồi Streak thành công! Mọi thứ đã trở lại.");
+                    alert("✨ Phục hồi Streak thành công!");
                     location.reload();
                 } catch(err) {
-                    alert("File không hợp lệ hoặc bị lỗi! Vui lòng chọn đúng file Backup.");
+                    alert("File không hợp lệ hoặc bị lỗi!");
                 }
             };
             reader.readAsText(file);
@@ -290,7 +282,7 @@
 
     function selectFehler() {
         currentLek = 'fehler';
-        localStorage.setItem('b2_last_lek', 'fehler');
+        localStorage.setItem('b2_test_lek', 'fehler');
         document.querySelectorAll('#lek-grid .btn-sub').forEach(el => el.style.borderColor = 'var(--border)');
         document.getElementById('btn-fehler').style.background = 'rgba(248, 113, 113, 0.2)';
         renderList();
@@ -299,12 +291,11 @@
     function startAdvancedMode() {
         let notMastered = data.filter(v => mastery[v.word].a && mastery[v.word].s < 3);
         if (notMastered.length > 0) {
-            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\n\nBạn phải học thuộc (đạt 3/3 🔥) TOÀN BỘ từ vựng và câu sai ở các bài học trước.\n\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!\n\nDu bist noch nicht für B2 berechtigt! Du musst alle Vokabeln auswendig lernen.`);
+            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!`);
         }
-
         isAdvancedMode = true;
         let availablePool = data.filter(v => mastery[v.word].a); 
-        if (availablePool.length === 0) return alert("Vui lòng chọn ít nhất 1 câu trong danh sách để ôn!");
+        if (availablePool.length === 0) return alert("Vui lòng chọn ít nhất 1 câu!");
         
         session = availablePool.sort(() => 0.5 - Math.random()).slice(0, 5);
         idx = 0; currentStep = 1; penaltyMode = false; penaltyCount = 0; isWaitingForNext = false;
@@ -343,7 +334,7 @@
             b.innerText = `Lek ${i}`;
             b.onclick = () => {
                 currentLek = i;
-                localStorage.setItem('b2_last_lek', i);
+                localStorage.setItem('b2_test_lek', i);
                 document.querySelectorAll('#lek-grid .btn-sub').forEach(el => el.style.borderColor = 'var(--border)');
                 document.getElementById('btn-fehler').style.background = 'rgba(255,255,255,0.05)';
                 b.style.borderColor = 'var(--primary)';
@@ -363,8 +354,7 @@
             }
         });
         
-        localStorage.setItem('b2_pro_v1', JSON.stringify(mastery));
-        renderList();
+        save(); // ĐÃ SỬA: Gọi hàm save() thay vì setItem thủ công bị lỗi
         renderHeat();
     }
 
@@ -407,18 +397,14 @@
 
         if (isMixedMode) {
             availablePool = data.filter(v => mastery[v.word].a && mastery[v.word].s >= 3);
-            if (availablePool.length === 0) {
-                return alert("Bạn chưa có từ nào đạt đủ Streak 3/3 để ôn tập!");
-            }
+            if (availablePool.length === 0) return alert("Bạn chưa có từ nào đạt đủ Streak 3/3 để ôn tập!");
         } else {
             availablePool = data.filter(v => 
                 (currentLek === 'fehler' ? (v.type && v.type.includes("Fehler")) : v.lek == currentLek) && 
                 mastery[v.word].a && 
                 mastery[v.word].s < 3
             );
-            if (availablePool.length === 0) {
-                return alert("Chúc mừng! Bạn đã học thuộc hết (đạt 3/3) các từ ở bài này!");
-            }
+            if (availablePool.length === 0) return alert("Chúc mừng! Bạn đã học thuộc hết (đạt 3/3) các từ ở bài này!");
         }
 
         if (isMixedMode) {
@@ -452,7 +438,7 @@
         if (currentStep !== 1 && currentStep !== 2) currentStep = 1;
 
         let fullType = (v.type || "Wort").replace(/\bAdj\.?\b/gi, "Adjektiv").replace(/\bAdv\.?\b/gi, "Adverb");
-        const stepText = isAdvancedMode ? (currentStep === 1 ? "B2 CỤM TỪ (Dịch)" : "B2 VÍ DỤ (Dịch nguyên câu)") : (currentStep === 1 ? "BƯỚC 1: TỪ GỐC/SCHRITT 1: SCHLÜSSELWÖRTER" : "BƯỚC 2: CỤM TỪ/SCHRITT 2: PHRASEN");
+        const stepText = isAdvancedMode ? (currentStep === 1 ? "B2 CỤM TỪ (Dịch)" : "B2 VÍ DỤ (Dịch nguyên câu)") : (currentStep === 1 ? "BƯỚC 1: TỪ GỐC" : "BƯỚC 2: CỤM TỪ");
         const currentVN = isAdvancedMode ? (currentStep === 1 ? v.vnans : v.vn_b2) : (currentStep === 1 ? v.vnword : v.vnans);
 
         let quickModeTag = isNoStreakMode ? `<span style="color: #34d399;">⚡ ÔN NHANH</span> | ` : "";
@@ -616,7 +602,7 @@
         const primaryDisplay = isAdvancedMode ? (currentStep === 1 ? v.ans : v.b2_ex) : (currentStep === 1 ? v.word : v.ans);
         const secondaryDisplay = isAdvancedMode ? (currentStep === 1 ? v.word : v.ans) : (currentStep === 1 ? v.ans : v.word);
 
-        let warningText = "⚠️ Sai rồi! Hãy gõ lại chính xác 3 lần! /Falsch! Bitte geben Sie es dreimal richtig ein!";
+        let warningText = "⚠️ Sai rồi! Hãy gõ lại chính xác 3 lần!";
         if (isNoStreakMode) {
             warningText = "⚠️ Sai rồi! (Streak được bảo toàn). Hãy xem kỹ đáp án và <u style='color:#fff'>bấm Enter</u> để đi tiếp!";
         }
@@ -714,7 +700,10 @@
         }
     }
 
-    function save() { localStorage.setItem('b2_pro_v1', JSON.stringify(mastery)); renderList(); }
+    function save() { 
+        localStorage.setItem('b2_pro_test', JSON.stringify(mastery)); // ĐÃ SỬA: Sửa đúng tên khóa bộ nhớ
+        renderList(); 
+    }
     function toggleAll(st) { data.forEach(v => mastery[v.word].a = st); save(); renderList(); }
     function resetStreak() { if(confirm("Xóa streak?")) { data.forEach(v => mastery[v.word].s = 0); save(); renderList(); } }
     function resetHeat() { if(confirm("Xóa heatmap?")) { data.forEach(v => mastery[v.word].w = 0); save(); renderHeat(); } }
