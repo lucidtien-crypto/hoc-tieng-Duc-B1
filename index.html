@@ -1,15 +1,11 @@
 <!DOCTYPE html>
 <html lang="vi">
-
-
-
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Deutsch B2 Pro Trainer</title>
-	<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0a0f1d;
@@ -61,7 +57,7 @@
         }
 
         .quiz-vn { font-size: 26px; font-weight: 700; text-align: center; margin: 15px 0; line-height: 1.4; }
-		.type-tag { 
+        .type-tag { 
             display: inline-block; padding: 4px 12px; background: rgba(167, 139, 250, 0.2); 
             color: var(--primary); border-radius: 8px; font-size: 11px; font-weight: 700; text-transform: uppercase;
         }
@@ -106,11 +102,13 @@
 </head>
 <body>
 
+<audio id="my-audio-player" playsinline style="display:none;"></audio>
+
 <div class="container">
     <div id="menu-screen">
         <div class="glass-card">
             <h2>Vokabelübung Kontext B2.1 <span id="lek-stats" style="font-size: 14px; font-weight: normal; color: var(--success); margin-left: 10px; background: rgba(52, 211, 153, 0.1); padding: 4px 10px; border-radius: 12px;">0/0</span></h2>
-			
+            
             <div id="lek-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px;"></div>
             
             <div style="display: flex; gap: 8px; margin-bottom: 20px;">
@@ -118,10 +116,8 @@
                 <button class="btn-main" id="btn-adv" onclick="startAdvancedMode()" style="background: linear-gradient(135deg, #f59e0b, #ef4444); padding: 8px; font-size: 14px; flex: 1; border-radius: 10px;">🔥 Nâng cao B2</button>
             </div>
 
-            <!-- Nút Bắt đầu học bình thường -->
             <button class="btn-main" onclick="startSession('normal')">Bắt đầu học (5 từ)/Lerne (5 Wörter)</button>
             
-            <!-- CHIA NÚT ÔN TẬP LÀM 2 -->
             <div style="display: flex; gap: 8px; margin-top: 10px;">
                 <button class="btn-main" style="background: linear-gradient(135deg, #3b82f6, #2dd4bf); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('mixed')">🔥 Ôn hỗn hợp (Tính Streak)-Gemischte Lernen</button>
                 <button class="btn-main" style="background: linear-gradient(135deg, #10b981, #059669); font-size: 14px; padding: 12px; flex: 1;" onclick="startSession('quick')">⚡ Ôn nhanh (Không phạt)- Kurzrezension (Kein Steak ging verloren)!</button>
@@ -144,7 +140,7 @@
     </div>
 
     <div id="quiz-screen" class="hidden">
-		<div style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 15px; font-style: italic;">
+        <div style="font-size: 14px; color: #94a3b8; text-align: center; margin-bottom: 15px; font-style: italic;">
             💡 <b>Công thức chuẩn:</b> [sich Akk/Dat] + [Giới từ] + jemanden / jemandem / etwas (Akk/Dat) + <b>[Động từ ở cuối]</b>
         </div>
         <div class="glass-card">
@@ -168,7 +164,6 @@
 
 <script>
 
-
     // BẠN DÁN DATA CỦA BẠN VÀO ĐÂY NHÉ
     const data = [
        {
@@ -183,76 +178,12 @@
         "b2_ex": "Es ist wichtig, dass jeder für seine eigenen Fehler verantwortlich ist.",
         "vn_b2": "Điều quan trọng là mỗi người phải tự chịu trách nhiệm về lỗi lầm của chính mình.",
         "lek": 1
-    },
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+    }
     ];
 
-    let isMixedMode = false; // Cờ theo dõi chế độ thi tổng hợp
-    let isNoStreakMode = false; // CỜ MỚI: Theo dõi chế độ Ôn nhanh (Không xóa streak)
-    let isWaitingForNext = false; // CỜ MỚI: Đợi người dùng bấm Enter để qua câu nếu làm sai ở chế độ Ôn nhanh
+    let isMixedMode = false; 
+    let isNoStreakMode = false; 
+    let isWaitingForNext = false; 
 
     let currentLek = localStorage.getItem('b2_last_lek') || 1; 
     if (currentLek !== 'fehler') currentLek = parseInt(currentLek) || 1;
@@ -266,45 +197,32 @@
     let isAdvancedMode = false;
     let isTransitioning = false; 
 
-    // --- BẮT ĐẦU PHẦN ÂM THANH (ĐÃ TỐI ƯU CHO MOBILE) ---
+    // --- HỆ THỐNG ÂM THANH MỚI (CHỐNG CHẶN TRÊN MOBILE) ---
+    const audioPlayer = document.getElementById('my-audio-player');
+    let isAudioUnlocked = false;
+
+    // Thủ thuật mở khóa Audio cho iOS/Android ngay lần bấm đầu tiên
+    function unlockAudio() {
+        if (isAudioUnlocked) return;
+        
+        // Gọi play() một lần để trình duyệt cấp quyền phát âm thanh
+        audioPlayer.play().then(() => {
+            audioPlayer.pause();
+            isAudioUnlocked = true;
+            console.log("🔓 Audio đã được mở khóa!");
+        }).catch(err => {
+            isAudioUnlocked = true; // Bỏ qua lỗi rỗng
+        });
+
+        document.removeEventListener('click', unlockAudio);
+        document.removeEventListener('touchstart', unlockAudio);
+    }
     
-    let isSpeechUnlocked = false;
-    let currentUtterance = null; // Biến toàn cục để chống lỗi mất tiếng trên iOS
+    // Gắn sự kiện vào toàn màn hình
+    document.addEventListener('click', unlockAudio);
+    document.addEventListener('touchstart', unlockAudio);
 
-    // Thủ thuật: Mở khóa âm thanh bằng một âm thanh "câm" ngay lần chạm màn hình đầu tiên
-    function unlockSpeech() {
-        if (isSpeechUnlocked || !('speechSynthesis' in window)) return;
-        
-        const silentUtterance = new SpeechSynthesisUtterance('');
-        silentUtterance.volume = 0; // Tắt âm lượng
-        window.speechSynthesis.speak(silentUtterance);
-        
-        isSpeechUnlocked = true;
-        console.log("🔓 Âm thanh đã được mở khóa trên Mobile!");
-        
-        // Hủy lắng nghe sau khi đã mở khóa thành công
-        document.removeEventListener('touchstart', unlockSpeech);
-        document.removeEventListener('click', unlockSpeech);
-    }
-
-    // Gắn sự kiện mở khóa vào toàn bộ màn hình
-    document.addEventListener('touchstart', unlockSpeech, { once: true });
-    document.addEventListener('click', unlockSpeech, { once: true });
-
-    // Tải danh sách giọng nói sẵn sàng
-    let availableVoices = [];
-    function loadVoices() {
-        availableVoices = window.speechSynthesis.getVoices();
-        if (availableVoices.length > 0) return;
-        window.speechSynthesis.onvoiceschanged = () => {
-            availableVoices = window.speechSynthesis.getVoices();
-        };
-    }
-    loadVoices();
-
-    // --- BẮT ĐẦU PHẦN ÂM THANH (DÙNG FILE MP3 CỦA GOOGLE DỊCH) ---
     function speakGerman(text) {
-        // 1. Làm sạch văn bản như cũ
         let cleanText = text.split(',')[0].trim();
         cleanText = cleanText
             .replace(/\+\s*(jmdm\.|jmdn\.|jmd\.|etw\.|etwas)\s*\((Da|Akk|D|A|Dat)\)/gi, (match, obj, kasus) => {
@@ -319,18 +237,16 @@
             .replace(/\b(r|r\.)\/(e|e\.)\s+(\w+)/g, "der $3, die $3")
             .replace(/\br\.\s/g, "der ").replace(/\be\.\s/g, "die ").replace(/\bs\.\s/g, "das ");
 
-        // 2. Tạo đường dẫn trực tiếp đến file MP3 của Google Translate
-        const url = `https://translate.google.com/translate_tts?ie=UTF-8&tl=de-DE&client=tw-ob&q=${encodeURIComponent(cleanText)}`;
+        // Dùng Endpoint Googleapis (Cực kỳ ổn định và không bị chặn CORS)
+        const url = `https://translate.googleapis.com/translate_tts?client=gtx&ie=UTF-8&tl=de-DE&q=${encodeURIComponent(cleanText)}`;
         
-        // 3. Khởi tạo một máy phát nhạc ảo và phát ngay lập tức
-        const audio = new Audio(url);
-        audio.playbackRate = 0.9; // Chỉnh tốc độ đọc (0.9 là hơi chậm lại một chút cho dễ nghe)
-        
-        audio.play().catch(err => {
+        audioPlayer.src = url;
+        audioPlayer.playbackRate = 0.9;
+        audioPlayer.play().catch(err => {
             console.log("Lỗi phát âm thanh: ", err);
         });
     }
-    // --- KẾT THÚC PHẦN ÂM THANH ---
+    // --- KẾT THÚC HỆ THỐNG ÂM THANH ---
 
     function exportData() {
         const dataStr = JSON.stringify(mastery);
@@ -383,9 +299,7 @@
     function startAdvancedMode() {
         let notMastered = data.filter(v => mastery[v.word].a && mastery[v.word].s < 3);
         if (notMastered.length > 0) {
-            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\n\nBạn phải học thuộc (đạt 3/3 🔥) TOÀN BỘ từ vựng và câu sai ở các bài học trước.\n\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!/          Du bist noch nicht für B2 berechtigt!
-Du musst alle Vokabeln und fehlerhaften Sätze aus den vorherigen Lektionen auswendig lernen, um 3/3 🔥 zu erreichen.
-Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
+            return alert(`🛑 CHƯA ĐỦ ĐIỀU KIỆN LÀM B2!\n\nBạn phải học thuộc (đạt 3/3 🔥) TOÀN BỘ từ vựng và câu sai ở các bài học trước.\n\nBạn còn ${notMastered.length} thẻ chưa hoàn thành!\n\nDu bist noch nicht für B2 berechtigt! Du musst alle Vokabeln auswendig lernen.`);
         }
 
         isAdvancedMode = true;
@@ -415,7 +329,7 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
             .replace(/\bs\b/g, "das")
             .replace(/\b(d|da|dat)\b/g, "dativ")
             .replace(/\b(a|akk)\b/g, "akkusativ")
-            .replace(/\b(g|gen)\b/g, "genitiv") // Thêm dòng này để hiểu chữ Gen
+            .replace(/\b(g|gen)\b/g, "genitiv") 
             .replace(/\b(jemandem|jemanden|jemand)\s+(etwas)\b/g, "$2 $1");
     }
 
@@ -484,7 +398,6 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         `).join('');
     }
 
-    // UPDATE: HÀM KHỞI TẠO HỖ TRỢ 3 CHẾ ĐỘ
     function startSession(mode = 'normal') {
         isAdvancedMode = false;
         isMixedMode = (mode === 'mixed' || mode === 'quick');
@@ -493,13 +406,11 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         let availablePool = [];
 
         if (isMixedMode) {
-            // Lấy từ đã đạt Streak 3
             availablePool = data.filter(v => mastery[v.word].a && mastery[v.word].s >= 3);
             if (availablePool.length === 0) {
                 return alert("Bạn chưa có từ nào đạt đủ Streak 3/3 để ôn tập!");
             }
         } else {
-            // Chế độ học thường (Streak < 3)
             availablePool = data.filter(v => 
                 (currentLek === 'fehler' ? (v.type && v.type.includes("Fehler")) : v.lek == currentLek) && 
                 mastery[v.word].a && 
@@ -510,12 +421,9 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
             }
         }
 
-        // BỐC TỪ VÀ XÁO TRỘN ĐÚNG LOGIC
         if (isMixedMode) {
-            // Chế độ Ôn tập (Hỗn hợp / Nhanh): Xáo trộn TOÀN BỘ kho từ trước, rồi bốc ngẫu nhiên 15 từ
             session = availablePool.sort(() => Math.random() - 0.5).slice(0, 15);
         } else {
-            // Chế độ Học mới: Bốc đúng 5 từ đầu tiên chưa thuộc, rồi xáo trộn thứ tự hỏi
             session = availablePool.slice(0, 5).sort(() => Math.random() - 0.5);
         }
 
@@ -547,7 +455,6 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         const stepText = isAdvancedMode ? (currentStep === 1 ? "B2 CỤM TỪ (Dịch)" : "B2 VÍ DỤ (Dịch nguyên câu)") : (currentStep === 1 ? "BƯỚC 1: TỪ GỐC/SCHRITT 1: SCHLÜSSELWÖRTER" : "BƯỚC 2: CỤM TỪ/SCHRITT 2: PHRASEN");
         const currentVN = isAdvancedMode ? (currentStep === 1 ? v.vnans : v.vn_b2) : (currentStep === 1 ? v.vnword : v.vnans);
 
-        // Hiển thị thêm Tag ⚡ nếu đang ở chế độ Ôn nhanh
         let quickModeTag = isNoStreakMode ? `<span style="color: #34d399;">⚡ ÔN NHANH</span> | ` : "";
 
         document.getElementById('q-type').innerHTML = `${quickModeTag}Wort ${idx + 1}/${session.length} | <span style="color: #fde047;">${fullType}</span> | ${stepText}`;
@@ -606,7 +513,6 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         const normTarget = normalizeGerman(target);
         const correct = normInput === normTarget;
 
-        // 1. Kiểm tra lỗi thiếu số nhiều (Logic cũ của bạn)
         if (!correct && currentStep === 1 && (v.type||"").toLowerCase().includes("nomen") && !penaltyMode && !isAdvancedMode) {
             const parts = target.split(',');
             if (parts.length > 1) {
@@ -622,21 +528,20 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         }
 
         if (!correct && !penaltyMode) {
-        const cleanInput = normInput.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
-        const cleanTarget = normTarget.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
-        
-        if (cleanInput === cleanTarget && cleanTarget !== normTarget) {
-            input.style.background = "rgba(251, 191, 36, 0.2)";
-            document.getElementById('fb').innerHTML = `
-                <div style="color: #fbbf24; font-weight: bold; margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid #fbbf24; text-align: left;">
-                    <span style="font-size: 16px;">⚠️ Gần đúng rồi!</span><br>
-                    <span style="font-size: 13px; font-weight: normal; color: #f8fafc; opacity: 0.9;">Bạn đang thiếu đuôi <b>(Akk)</b>, <b>(Dat)</b> hoặc <b>(Gen)</b> kìa.<br>Hãy điền nốt vào để qua câu nhé!</span>
-                </div>`;
-            return; 
+            const cleanInput = normInput.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
+            const cleanTarget = normTarget.replace(/\b(akkusativ|dativ|genitiv)\b/g, "").replace(/\s+/g, " ").trim();
+            
+            if (cleanInput === cleanTarget && cleanTarget !== normTarget) {
+                input.style.background = "rgba(251, 191, 36, 0.2)";
+                document.getElementById('fb').innerHTML = `
+                    <div style="color: #fbbf24; font-weight: bold; margin-top: 15px; padding: 15px; background: rgba(251, 191, 36, 0.1); border-radius: 12px; border: 1px solid #fbbf24; text-align: left;">
+                        <span style="font-size: 16px;">⚠️ Gần đúng rồi!</span><br>
+                        <span style="font-size: 13px; font-weight: normal; color: #f8fafc; opacity: 0.9;">Bạn đang thiếu đuôi <b>(Akk)</b>, <b>(Dat)</b> hoặc <b>(Gen)</b> kìa.<br>Hãy điền nốt vào để qua câu nhé!</span>
+                    </div>`;
+                return; 
+            }
         }
-    }
 
-        // 3. XỬ LÝ KHI GÕ ĐÚNG 100%
         if (correct) {
             speakGerman(target);
             if (penaltyMode) {
@@ -684,7 +589,6 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
                 }
             }
         } else {
-            // 4. XỬ LÝ KHI GÕ SAI HOÀN TOÀN
             speakGerman(target);
             
             if (isNoStreakMode) {
@@ -735,11 +639,8 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
         `;
     }
 
-    // UPDATE: XỬ LÝ ENTER CHO CHẾ ĐỘ CHỜ (KHI GÕ SAI Ở ÔN NHANH)
-   window.addEventListener('keydown', (e) => {
+    window.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-            // 1. KHÓA CHẶT TÍNH NĂNG XUỐNG DÒNG: 
-            // Đảm bảo dù gõ phạt 3 lần hay 10 lần, con trỏ chuột vẫn ở dòng đầu tiên, không bị tụt chữ.
             e.preventDefault(); 
             
             if (isTransitioning) return; 
@@ -751,20 +652,18 @@ Du hast noch ${notMastered.length} Karten zu bearbeiten!`);
             if (!menuScreen.classList.contains('hidden')) { startSession('normal'); return; }
             if (document.getElementById('finish-card')) { location.reload(); return; }
             if (!quizScreen.classList.contains('hidden')) {
-                // 2. GIỮ NGUYÊN TÍNH NĂNG CHỜ BẤM ENTER CỦA BẠN
                 if (typeof isWaitingForNext !== 'undefined' && isWaitingForNext) {
                     isWaitingForNext = false;
                     if (currentStep === 1) {
-                        currentStep = 2; // Qua bước cụm từ
+                        currentStep = 2; 
                     } else {
                         currentStep = 1;
-                        idx++; // Qua từ tiếp theo
+                        idx++; 
                     }
                     showWord();
                     return;
                 }
                 
-                // 3. XỬ LÝ KIỂM TRA TỪ
                 if (input && input.value.trim() !== "") { processCheck(); }
             }
         }
