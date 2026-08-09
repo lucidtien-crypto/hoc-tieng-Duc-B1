@@ -9,7 +9,7 @@
     <!-- Thư viện đọc chữ (dự phòng) -->
     <script src="https://code.responsivevoice.org/responsivevoice.js"></script>
     <!-- Thư viện YouTube IFrame API cho nhạc Lofi -->
-    <script src="https://www.youtube.com/iframe_api"></script>
+    <!--<script src="https://www.youtube.com/iframe_api"></script>
     <style>
         :root {
             --bg: #090d16;
@@ -52333,9 +52333,14 @@
     let ytPlayer;
     let isMusicPlaying = false;
 
+    // Tải YouTube API tự động (giúp không bị lỗi khi phục hồi dữ liệu xong reload trang)
+    const tag = document.createElement('script');
+    tag.src = "https://www.youtube.com/iframe_api";
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
     function onYouTubeIframeAPIReady() {
         ytPlayer = new YT.Player('yt-player-container', {
-            // Phải để kích thước có thực (dù nhỏ) để trình duyệt không chặn
             height: '10', 
             width: '10',
             videoId: '0n1XLJse7sQ',
@@ -52349,7 +52354,6 @@
             },
             events: {
                 'onReady': function(event) {
-                    // Cài đặt âm lượng 60% khi trình phát vừa tải xong
                     event.target.setVolume(60);
                 }
             }
@@ -52359,9 +52363,21 @@
     function toggleMusic() {
         const btn = document.getElementById('music-btn');
         
+        // Nếu API chưa load xong, thay vì hiện alert thì chỉ nháy chữ nhẹ nhàng
+        if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') {
+            const oldText = btn.innerHTML;
+            btn.innerHTML = '⏳ Đang kết nối...';
+            btn.style.opacity = '0.7';
+            setTimeout(() => {
+                if (btn.innerHTML === '⏳ Đang kết nối...') {
+                    btn.innerHTML = oldText;
+                    btn.style.opacity = '1';
+                }
+            }, 1500);
+            return;
+        }
 
         const state = ytPlayer.getPlayerState();
-        // state === 1 là đang chạy, 3 là đang tải đệm (buffering)
         if (state === 1 || state === 3) {
             ytPlayer.pauseVideo();
             btn.innerHTML = '🎵 Melodie von Bach';
@@ -52369,7 +52385,6 @@
             btn.style.color = '#38bdf8';
             btn.style.borderColor = 'rgba(56, 189, 248, 0.3)';
         } else {
-            // Đảm bảo set lại âm lượng 60% trước khi play (phòng hờ)
             ytPlayer.setVolume(60);
             ytPlayer.playVideo();
             btn.innerHTML = '⏸️ Pause - Melodie von Bach';
