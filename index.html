@@ -249,7 +249,7 @@
 <body>
 
 <!-- Hidden container for YouTube Audio Player -->
-<div id="yt-player-container" style="display:none;"></div>
+<div id="yt-player-container" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"></div>
 
 <div class="container">
     <div id="menu-screen">
@@ -258,7 +258,7 @@
             <div class="top-bar">
                 <div style="display: flex; gap: 8px; flex: 1;">
                     <div class="btn-guide-trigger" onclick="openGuide(true)" style="justify-content: center; padding: 6px 10px;">💡</div>
-                    <div id="music-btn" class="btn-guide-trigger" onclick="toggleMusic()" style="justify-content: center; flex: 1; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">🎵 Melodie von Bach </div>
+                    <div id="music-btn" class="btn-guide-trigger" onclick="toggleMusic()" style="justify-content: center; flex: 1; background: rgba(56, 189, 248, 0.1); color: #38bdf8; border-color: rgba(56, 189, 248, 0.3);">🎵 Melodie von Bach</div>
                 </div>
                 <span id="lek-stats" style="font-size: 13px; font-weight: 700; color: var(--success); background: rgba(52, 211, 153, 0.1); padding: 5px 12px; border-radius: 12px; margin-left: 8px;">0/0 🔥</span>
             </div>
@@ -52352,21 +52352,19 @@
     function toggleMusic() {
         const btn = document.getElementById('music-btn');
         
-        // Nếu player chưa tải xong thì chỉ thoát ra ngầm, không báo alert nữa
         if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') {
             return;
         }
 
         const state = ytPlayer.getPlayerState();
-        if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
+        // state === 1 là đang chạy, 3 là đang tải đệm (buffering)
+        if (state === 1 || state === 3) {
             ytPlayer.pauseVideo();
-            isMusicPlaying = false;
             btn.innerHTML = '🎵 Melodie von Bach';
             btn.style.background = 'rgba(56, 189, 248, 0.1)';
             btn.style.color = '#38bdf8';
         } else {
             ytPlayer.playVideo();
-            isMusicPlaying = true;
             btn.innerHTML = '⏸️ Pause - Melodie von Bach';
             btn.style.background = 'rgba(234, 88, 12, 0.2)';
             btn.style.color = '#fff';
