@@ -52359,11 +52359,6 @@
     function toggleMusic() {
         const btn = document.getElementById('music-btn');
         
-        // Kiểm tra nếu API chưa load xong
-        if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') {
-            alert("Đang kết nối với nhạc nền, vui lòng chờ 1-2 giây rồi thử lại...");
-            return;
-        }
 
         const state = ytPlayer.getPlayerState();
         // state === 1 là đang chạy, 3 là đang tải đệm (buffering)
