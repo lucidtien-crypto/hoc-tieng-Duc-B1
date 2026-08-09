@@ -52360,13 +52360,13 @@
         if (state === YT.PlayerState.PLAYING || state === YT.PlayerState.BUFFERING) {
             ytPlayer.pauseVideo();
             isMusicPlaying = false;
-            btn.innerHTML = '🎵 Bật nhạc Lofi';
+            btn.innerHTML = '🎵 Melodie von Bach';
             btn.style.background = 'rgba(56, 189, 248, 0.1)';
             btn.style.color = '#38bdf8';
         } else {
             ytPlayer.playVideo();
             isMusicPlaying = true;
-            btn.innerHTML = '⏸️ Tắt nhạc Lofi';
+            btn.innerHTML = '⏸️ Pause';
             btn.style.background = 'rgba(234, 88, 12, 0.2)';
             btn.style.color = '#fff';
         }
