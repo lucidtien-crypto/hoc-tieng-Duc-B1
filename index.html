@@ -249,7 +249,7 @@
 <body>
 
 <!-- Hidden container for YouTube Audio Player -->
-<div id="yt-player-container" style="position: absolute; top: -9999px; left: -9999px; width: 1px; height: 1px;"></div>
+<div id="yt-player-container" style="position: absolute; opacity: 0; pointer-events: none; width: 10px; height: 10px; overflow: hidden; z-index: -1;"></div>
 
 <div class="container">
     <div id="menu-screen">
@@ -52335,8 +52335,9 @@
 
     function onYouTubeIframeAPIReady() {
         ytPlayer = new YT.Player('yt-player-container', {
-            height: '0',
-            width: '0',
+            // Phải để kích thước có thực (dù nhỏ) để trình duyệt không chặn
+            height: '10', 
+            width: '10',
             videoId: '0n1XLJse7sQ',
             playerVars: {
                 'autoplay': 0,
@@ -52345,6 +52346,12 @@
                 'rel': 0,
                 'loop': 1,
                 'playlist': '0n1XLJse7sQ' 
+            },
+            events: {
+                'onReady': function(event) {
+                    // Cài đặt âm lượng 60% khi trình phát vừa tải xong
+                    event.target.setVolume(60);
+                }
             }
         });
     }
@@ -52352,7 +52359,9 @@
     function toggleMusic() {
         const btn = document.getElementById('music-btn');
         
+        // Kiểm tra nếu API chưa load xong
         if (!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') {
+            alert("Đang kết nối với nhạc nền, vui lòng chờ 1-2 giây rồi thử lại...");
             return;
         }
 
@@ -52363,11 +52372,15 @@
             btn.innerHTML = '🎵 Melodie von Bach';
             btn.style.background = 'rgba(56, 189, 248, 0.1)';
             btn.style.color = '#38bdf8';
+            btn.style.borderColor = 'rgba(56, 189, 248, 0.3)';
         } else {
+            // Đảm bảo set lại âm lượng 60% trước khi play (phòng hờ)
+            ytPlayer.setVolume(60);
             ytPlayer.playVideo();
             btn.innerHTML = '⏸️ Pause - Melodie von Bach';
             btn.style.background = 'rgba(234, 88, 12, 0.2)';
             btn.style.color = '#fff';
+            btn.style.borderColor = '#ea580c';
         }
     }
 
